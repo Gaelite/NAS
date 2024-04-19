@@ -1,3 +1,5 @@
+//Para llamar un modulo se usa require
+//const prueba = require("./prueba.js");
 const axios = require('axios');
 const { Client } = require('ssh2');
 //buscar acerca esas dos librerias
