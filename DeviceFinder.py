@@ -1,106 +1,84 @@
-import socket
-import textfsm
-from netmiko import ConnectHandler
 from Devices import Device
+import time
+import concurrent.futures
+from functions import get_device_neighbor_details, get_device_info
 
-cdp_template = textfsm.TextFSM(open("show_cdp_neighbor_detail.textfsm"))
-int_brief_template = textfsm.TextFSM(open("cisco_ios_show_ip_interface_brief.textfsm"))
-intv6_brief_template = textfsm.TextFSM(open("cisco_ios_show_ipv6_interface_brief.textfsm"))
-cdpv6_template = textfsm.TextFSM(open("cisco_ios_show_ipv6_neighbors.textfsm"))
-
-def get_device_neighbor_details(ip, username, password, enable_secret):
-    try:
-        #Inicia SSH
-        ssh_connection = ConnectHandler(
-            device_type='cisco_ios',
-            ip=ip,
-            username=username,
-            password=password,
-            secret=enable_secret
-        )
-    except Exception as error:
-        return error
-
-    ssh_connection.enable()#Activa modo EXEC privilegiado
-
-    cdp_result,cdpv6_result= ssh_connection.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
-
-    #Informacion de vecinos
-    cdp_result += ssh_connection.send_command("show cdp neighbor detail", delay_factor=2)#te consigue la informacion CDP
-
-    #Desconectar SSH
-    ssh_connection.disconnect()
-
-    #procesar info para enviar a servidor
-    fsm_cdp_results = cdp_template.ParseText(cdp_result)
-
-    return fsm_cdp_results
-
-def get_device_info(ip, username, password, enable_secret):
-    try:
-        #Inicia SSH
-        ssh_connection = ConnectHandler(
-            device_type='cisco_ios',
-            ip=ip,
-            username=username,
-            password=password,
-            secret=enable_secret
-        )
-    except Exception as error:
-        return error
-
-    ssh_connection.enable()#Activa modo EXEC privilegiado
-
-    int_brief_result,intv6_brief_result = ssh_connection.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
-
-    #Informacion de interfaces
-    int_brief_result += ssh_connection.send_command("show ip interface brief", delay_factor=2)#te consigue la informacion de interfaces del dispositivo
-
-    inv6_brief_result += ssh_connection.send_command("show ipv6 interface brief", delay_factor=2)#te consigue la informacion de interfaces del dispositivo
-
-    #Desconectar SSH
-    ssh_connection.disconnect()
-
-    #procesar info para enviar a servidor
-    fsm_int_results = cdp_template.ParseText(int_brief_result)
-    fsm_intv6_results = cdp_template.ParseText(intv6_brief_result)
-
-    result =[[fsm_int_results],[fsm_intv6_results]]
-
-    return result
+# Inicio del tiempo
+inicio = time.time()
 
 if __name__ == "__main__":
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(("127.0.0.1", 12345))
-    
     all_devices = []
     used_IPs = []
+    unused_IPs = []
+
+    ip = "192.168.10.1"#input("Hola ip")
+    username = "gmedina"# input("Hola username")
+    password ="cisco" #input("Hola password")
+    secret = "cisco"#input("Hola secret")
 
     while True:
-        ip = input("Hola ip")
-        username = input("Hola username")
-        password = input("Hola password")
-        secret = input("Hola secret")
 
-        current_device = get_device_info(ip,username,password,secret)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            # Lanzamos las tareas
+            device = executor.submit(get_device_info,ip,username,password,secret)
+            neighbor =executor.submit(get_device_neighbor_details,ip,username,password,secret)
+            # Obtenemos los resultados
+            current_device = device.result()
+            neighbor_device,type = neighbor.result()
 
-        neighbor_device = get_device_neighbor_details(ip,username,password,secret)
+
+        #for i in current_device:
+        #   print('\n',i,'\n')
+        #for k in current_device[0]:
+        #  print("\n",k,"\n")
+        #for h in current_device[1]:
+        #   print("\n",h,"\n")
+        #for x in neighbor_device:
+        #   print('\n',x,'\n')
+
+        #print(neighbor_device[0])
 
         #creo un objeto tipo device
-        device = Device(ip,current_device[0][0],ip,current_device[0],current_device[1])
 
-        for x in range(0,neighbor_device.length):
+        device = Device(ip)
+
+        device.set_interfaces(current_device[0],current_device[1])
+
+        for x in range(len(neighbor_device)):
             if neighbor_device[x][0] == current_device[0][0]:
                 break
-
-        device.update_connections(neighbor_device[x][4],neighbor_device[x][5],neighbor_device[x][2])
+            device.set_connections(neighbor_device[x][4],ip, type[2], neighbor_device[x][5], neighbor_device[x][2])
 
         all_devices.append(device)
 
         used_IPs.append(ip)
 
-        ip = neighbor_device[0][2]
+        for x in neighbor_device:
+            unused_IPs.append(x[2])
+
+        print(unused_IPs," and ",used_IPs)
+
+        for x in used_IPs:
+            if x in unused_IPs:
+                unused_IPs.remove(x)
+                
+        if len(unused_IPs) > 0:
+            ip = unused_IPs[0]
+
+        for x in all_devices:
+            print(x)
+        
+        if len(unused_IPs) == 0:
+            pass
+        break
+
+    # Fin del tiempo
+    fin = time.time()
+    # Cálculo del tiempo transcurrido
+    tiempo_transcurrido = fin - inicio
+    print("Tiempo transcurrido:", tiempo_transcurrido, "segundos")
+    
 
     
     
