@@ -50,7 +50,7 @@ class Device:
         if self.connections:
             device_str += "Connections:\n"
             for conn in self.connections:
-                device_str += f"- From Interface: {conn['Connected_from_Interface']}, From IP: {conn['From_IP']} , To Interface: {conn['Connected_to_Interface']}, To IP: {conn['To_IP']}\n"
+                device_str += f"- From Interface: {conn['Connected_from_Interface']}, From IP: {conn['From_IP']}, Device: {conn['Device']} , To Interface: {conn['Connected_to_Interface']}, To IP: {conn['To_IP']}\n"
         else:
             device_str += "No connections."
 

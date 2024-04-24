@@ -37,8 +37,6 @@ def get_device_neighbor_details(ip, username, password, enable_secret):
     fsm_cdp_results = cdp_template.ParseText(cdp_result)
     fsm_type_results = type_template.ParseText(type_result)
 
-    print(fsm_type_results)
-
     return fsm_cdp_results,fsm_type_results
 
 def get_device_info(ip, username, password, enable_secret):

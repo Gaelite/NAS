@@ -12,7 +12,7 @@ if __name__ == "__main__":
     used_IPs = []
     unused_IPs = []
 
-    ip = "192.168.10.1"#input("Hola ip")
+    ip = "192.168.5.1"#input("Hola ip")
     username = "gmedina"# input("Hola username")
     password ="cisco" #input("Hola password")
     secret = "cisco"#input("Hola secret")
@@ -42,13 +42,13 @@ if __name__ == "__main__":
         #creo un objeto tipo device
 
         device = Device(ip)
-
+        print(type)
         device.set_interfaces(current_device[0],current_device[1])
 
         for x in range(len(neighbor_device)):
             if neighbor_device[x][0] == current_device[0][0]:
                 break
-            device.set_connections(neighbor_device[x][4],ip, type[2], neighbor_device[x][5], neighbor_device[x][2])
+            device.set_connections(neighbor_device[x][4],ip, type[x][2], neighbor_device[x][5], neighbor_device[x][2])
 
         all_devices.append(device)
 
