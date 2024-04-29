@@ -1,14 +1,15 @@
 import textfsm
 from netmiko import ConnectHandler
 
-cdp_template = textfsm.TextFSM(open("Templates/show_cdp_neighbor_detail.textfsm"))
-type_template = textfsm.TextFSM(open("Templates/cisco_ios_show_cdp_neighbors.textfsm"))
-int_brief_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ip_interface_brief.textfsm"))
-intv6_brief_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ipv6_interface_brief.txtfsm"))
-cdpv6_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ipv6_neighbors.textfsm"))
-
 def get_device_neighbor_details(ip, username, password, enable_secret):
     try:
+        cdp_template = textfsm.TextFSM(open("Templates/show_cdp_neighbor_detail.textfsm"))
+        type_template = textfsm.TextFSM(open("Templates/cisco_ios_show_cdp_neighbors.textfsm"))
+        ssh_connection = []
+        cdp_result = []
+        type_result = []
+        fsm_cdp_results = []
+        fsm_type_results = []
         #Inicia SSH
         ssh_connection = ConnectHandler(
             device_type='cisco_ios',
@@ -41,6 +42,13 @@ def get_device_neighbor_details(ip, username, password, enable_secret):
 
 def get_device_info(ip, username, password, enable_secret):
     try:
+        int_brief_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ip_interface_brief.textfsm"))
+        intv6_brief_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ipv6_interface_brief.txtfsm"))
+        ssh_connection = []
+        int_brief_result = []
+        intv6_brief_result = []
+        fsm_int_results = []
+        fsm_intv6_results = []
         #Inicia SSH
         ssh_connection = ConnectHandler(
             device_type='cisco_ios',
