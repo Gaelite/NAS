@@ -94,24 +94,8 @@ function insertData(data) {
 }
 
 // Ejemplo de datos a insertar en la base de datos (formato similar al que generas en Python)
-const exampleData = {
-    devices: [
-        {
-            id: 1,
-            deviceType: 'Router',
-            ip: '192.168.10.1',
-            interfaces: [
-                { interface: 'GigabitEthernet0/0', ipv4: '192.168.10.1', ipv6: null, linkLocal: null },
-                { interface: 'GigabitEthernet0/1', ipv4: '10.0.0.1', ipv6: null, linkLocal: null }
-            ],
-            connections: [
-                { connectedFromInterface: 'GigabitEthernet0/0', fromIp: '192.168.10.1', connectedToDevice: 'Switch', connectedToInterface: 'FastEthernet0/1', toIp: '10.0.0.2' }
-            ]
-        }
-    ]
-};
+
 
 // Crear la base de datos y luego insertar los datos
 createDatabase()
-    .then(() => insertData(exampleData))
     .catch((error) => console.error('Error:', error));
