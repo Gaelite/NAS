@@ -1,22 +1,22 @@
 const net = require('net');
-const { Telegraf } = require('telegraf');
 
-// Configuración de conexión TCP
-const host = '127.0.0.1';  // Dirección IP del servidor
-const port = 5000;         // Puerto del servidor
+// Configuración del servidor TCP
+const tcpHost = '127.0.0.1';  // Dirección IP del servidor TCP
+const tcpPort = 12345;         // Puerto del servidor TCP
 
-// Token de tu bot de Telegram
-const botToken = '7096921255:AAGnovM7Uzm4OYmktZp2F6ib-cLEidm4IQU';
+// Configuración del cliente Kiwi
+const kiwiHost = '192.168.16.100'; // Dirección IP del servidor Kiwi
+const kiwiPort = 5000;         // Puerto del servidor Kiwi
 
-// ID del canal o grupo de Telegram
-const channelId = '-1002006912983'; // Reemplaza con el ID de tu canal o grupo
-
-// Crear una instancia del bot de Telegram
-const bot = new Telegraf(botToken);
+// Lista de clientes conectados
+const clients = [];
 
 // Crear servidor TCP
 const server = net.createServer((socket) => {
     console.log('Cliente conectado desde: ' + socket.remoteAddress + ':' + socket.remotePort);
+
+    // Agregar cliente a la lista
+    clients.push(socket);
 
     // Manejar datos recibidos del cliente
     socket.on('data', (data) => {
@@ -24,20 +24,37 @@ const server = net.createServer((socket) => {
             const receivedData = JSON.parse(data.toString()); // Convertir datos recibidos a objeto JavaScript
             console.log('Datos recibidos del cliente:', receivedData);
 
-            // Enviar los datos al canal o grupo de Telegram con formato
-            sendToTelegram(channelId, receivedData);
-            
-            // Hacer algo con los datos recibidos (por ejemplo, guardarlos en una base de datos)
-            // Aquí debes implementar tu lógica para procesar los datos recibidos
-            console.log('Datos recibidos correctamente.');
+            // Procesar datos recibidos
+            switch (receivedData.command) {
+                case 'hello':
+                    // Enviar mensaje de respuesta al cliente
+                    socket.write('Hola, cliente.\r\n');
+                    break;
+                case 'broadcast':
+                    // Enviar mensaje a todos los clientes
+                    clients.forEach((client) => {
+                        client.write(JSON.stringify({ from: 'Servidor TCP', message: '¡Este es un mensaje de difusión!' }));
+                    });
+                    break;
+                default:
+                    // Comando desconocido, enviar mensaje de error al cliente
+                    socket.write('Comando desconocido.\r\n');
+                    break;
+            }
         } catch (error) {
             console.error('Error al procesar datos recibidos:', error.message);
+            socket.write('Error al procesar datos recibidos.\r\n');
         }
     });
 
     // Manejar eventos de cierre de conexión
     socket.on('close', () => {
         console.log('Cliente desconectado.');
+        // Eliminar cliente de la lista
+        const index = clients.indexOf(socket);
+        if (index !== -1) {
+            clients.splice(index, 1);
+        }
     });
 
     // Manejar errores de conexión
@@ -46,48 +63,33 @@ const server = net.createServer((socket) => {
     });
 });
 
-// Manejar el comando /start
-bot.start(async (ctx) => {
-    try {
-        // Enviar mensaje de bienvenida al canal o grupo
-        await bot.telegram.sendMessage(channelId, '¡Bienvenido a NAS! Aquí se mandarán las notificaciones syslog.');
-        console.log('Mensaje de bienvenida enviado con éxito al canal o grupo.');
-    } catch (error) {
-        console.error('Error al enviar mensaje de bienvenida:', error.message);
-    }
-});
-
 // Manejar errores de servidor
 server.on('error', (error) => {
     console.error('Error en el servidor:', error.message);
 });
 
 // Escuchar conexiones en el puerto especificado
-server.listen(port, host, () => {
-    console.log(`Servidor TCP escuchando en ${host}:${port}`);
+server.listen(tcpPort, tcpHost, () => {
+    console.log(`Servidor TCP escuchando en ${tcpHost}:${tcpPort}`);
 });
 
-// Función para enviar los datos al canal o grupo de Telegram con formato
-async function sendToTelegram(channelId, data) {
-    try {
-        // Obtener la fecha y hora actual
-        const currentDate = new Date();
-        const formattedDate = currentDate.toISOString().slice(0, 10);
-        const formattedTime = currentDate.toTimeString().slice(0, 8);
+// Conectar al servidor Kiwi como cliente
+const kiwiClient = net.createConnection({ host: kiwiHost, port: kiwiPort }, () => {
+    console.log(`Conectado al servidor Kiwi en ${kiwiHost}:${kiwiPort}`);
 
-        // Construir el mensaje con formato
-        const message = `Fecha: ${formattedDate}\nHora: ${formattedTime}\nDatos recibidos:\n${JSON.stringify(data)}`;
+    // Enviar mensaje de conexión al servidor Kiwi
+    kiwiClient.write(JSON.stringify({ from: 'Servidor TCP', message: '¡Hola, Kiwi!' }));
+});
 
-        console.log('Intentando enviar mensaje a Telegram:', message);
+// Manejar eventos del cliente Kiwi
+kiwiClient.on('data', (data) => {
+    console.log('Datos recibidos del servidor Kiwi:', data.toString());
+});
 
-        // Envía el mensaje al canal o grupo de Telegram
-        await bot.telegram.sendMessage(channelId, message);
+kiwiClient.on('end', () => {
+    console.log('Desconectado del servidor Kiwi');
+});
 
-        console.log('Mensaje enviado con éxito a Telegram.');
-    } catch (error) {
-        console.error('Error al enviar mensaje a Telegram:', error.message);
-    }
-}
-
-// Inicia el bot de Telegram
-bot.launch();
+kiwiClient.on('error', (error) => {
+    console.error('Error de conexión con el servidor Kiwi:', error.message);
+});

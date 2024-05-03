@@ -5,7 +5,7 @@ const tcpHost = '127.0.0.1';  // Dirección IP del servidor TCP
 const tcpPort = 12345;         // Puerto del servidor TCP
 
 // Configuración del cliente Kiwi
-const kiwiHost = '127.0.0.1'; // Dirección IP del servidor Kiwi
+const kiwiHost = '192.168.16.100'; // Dirección IP del servidor Kiwi
 const kiwiPort = 5000;         // Puerto del servidor Kiwi
 
 // Crear servidor TCP
