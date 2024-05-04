@@ -1,5 +1,6 @@
+const { spawn } = require('child_process');
 const sqlite3 = require('sqlite3').verbose();
-const { get_device_neighbor_details, get_device_info } = require('./DeviceFinder.py'); // Asegúrate de que las funciones estén en el archivo functions.js
+const { get_device_neighbor_details, get_device_info } = require('./DeviceFinder.py');
 
 // Ruta del archivo de base de datos
 const dbPath = './network.db';
@@ -82,18 +83,25 @@ get_device_info(ip, username, password, secret).then((current_device) => {
   get_device_neighbor_details(ip, username, password, secret).then(([neighbor_device, type]) => {
     // Procesar los datos y luego insertarlos en la base de datos
     const all_devices = [];
-    const device = new Device(ip);
-    device.set_interfaces(current_device[0], current_device[1]);
+    const device = { deviceType: 'router', ip: ip, interfaces: [], connections: [] };
+    device.interfaces = current_device[0].map(interface => ({ Interface: interface.Interface, IPv4: interface.IPv4, IPv6: interface.IPv6, 'Link-local': interface['Link-local'] }));
     for (let x = 0; x < neighbor_device.length; x++) {
       if (neighbor_device[x][0] === current_device[0][0]) {
         break;
       }
+      let local_IP;
       for (const z of device.interfaces) {
         if (z.Interface === neighbor_device[x][4]) {
-          const local_IP = z.IPv4;
+          local_IP = z.IPv4;
         }
       }
-      device.set_connections(neighbor_device[x][4], local_IP, type[x][2], neighbor_device[x][5], neighbor_device[x][2]);
+      device.connections.push({
+        Connected_from_Interface: neighbor_device[x][4],
+        From_IP: local_IP,
+        Device: neighbor_device[x][2],
+        Connected_to_Interface: neighbor_device[x][5],
+        To_IP: neighbor_device[x][2]
+      });
     }
     all_devices.push(device);
     
@@ -104,4 +112,28 @@ get_device_info(ip, username, password, secret).then((current_device) => {
   });
 }).catch((error) => {
   console.error('Error:', error);
+});
+
+// Ruta al script Python
+const pythonScriptPath = 'DeviceFinder.py';
+
+// Argumentos para el script Python
+const args = [];
+
+// Crear una instancia del proceso Python
+const pythonProcess = spawn('python', [pythonScriptPath, ...args]);
+
+// Manejar la salida del proceso Python
+pythonProcess.stdout.on('data', (data) => {
+    console.log(`Salida del script Python: ${data}`);
+});
+
+// Manejar errores del proceso Python
+pythonProcess.stderr.on('data', (data) => {
+    console.error(`Error del script Python: ${data}`);
+});
+
+// Manejar la finalización del proceso Python
+pythonProcess.on('close', (code) => {
+    console.log(`El script Python ha finalizado con código de salida ${code}`);
 });
