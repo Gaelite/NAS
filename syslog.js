@@ -11,6 +11,10 @@ const botToken = '7096921255:AAGnovM7Uzm4OYmktZp2F6ib-cLEidm4IQU';
 // ID del canal o grupo de Telegram
 const channelId = '-1002006912983';
 
+// Dirección IP y puerto del servidor Kiwi
+const kiwiHost = '192.168.16.100'; // Dirección IP del servidor Kiwi
+const kiwiPort = 5000;         // Puerto del servidor Kiwi
+
 // Crear una instancia del bot de Telegram
 const bot = new Telegraf(botToken);
 
@@ -26,6 +30,9 @@ const server = net.createServer((socket) => {
 
             // Enviar los datos al canal o grupo de Telegram con formato
             sendToTelegram(channelId, receivedData);
+            
+            // Enviar los datos al servidor Kiwi
+            sendToKiwi(receivedData);
             
             // Hacer algo con los datos recibidos (por ejemplo, guardarlos en una base de datos)
             // Aquí debes implementar tu lógica para procesar los datos recibidos
@@ -86,6 +93,34 @@ async function sendToTelegram(channelId, data) {
         console.log('Mensaje enviado con éxito a Telegram.');
     } catch (error) {
         console.error('Error al enviar mensaje a Telegram:', error.message);
+    }
+}
+
+// Función para enviar los datos al servidor Kiwi
+function sendToKiwi(data) {
+    try {
+        // Crear una conexión con el servidor Kiwi
+        const kiwiClient = net.createConnection({ host: kiwiHost, port: kiwiPort }, () => {
+            console.log(`Conectado al servidor Kiwi en ${kiwiHost}:${kiwiPort}`);
+
+            // Enviar datos al servidor Kiwi
+            kiwiClient.write(JSON.stringify(data));
+            console.log('Datos enviados al servidor Kiwi:', data);
+
+            // Cerrar la conexión después de enviar los datos
+            kiwiClient.end();
+        });
+
+        // Manejar eventos del cliente Kiwi
+        kiwiClient.on('end', () => {
+            console.log('Desconectado del servidor Kiwi');
+        });
+
+        kiwiClient.on('error', (error) => {
+            console.error('Error de conexión con el servidor Kiwi:', error.message);
+        });
+    } catch (error) {
+        console.error('Error al enviar datos al servidor Kiwi:', error.message);
     }
 }
 
