@@ -27,3 +27,11 @@ CREATE TABLE IF NOT EXISTS Connections (
     toIp TEXT,
     FOREIGN KEY (deviceId) REFERENCES Devices(id)
 );
+
+CREATE TABLE IF NOT EXISTS SyslogNotifications (
+    id INTEGER PRIMARY KEY,
+    deviceId INTEGER,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    message TEXT,
+    FOREIGN KEY (deviceId) REFERENCES Devices(id)
+);

@@ -25,9 +25,26 @@ socket.on('disconnect', () => {
     console.log('Desconectado del servidor socket.io');
 });
 
-// Manejar eventos de mensajes desde el servidor socket.io
-socket.on('message', (data) => {
-    console.log('Mensaje recibido desde el servidor socket.io:', data);
+// Manejar eventos de mensajes syslog desde el servidor socket.io
+socket.on('syslogActivity', async (log) => {
+    console.log('Actividad syslog recibida:', log);
+    try {
+        // Enviar el log al canal o grupo de Telegram
+        await bot.telegram.sendMessage(channelId, log);
+        console.log('Mensaje enviado al canal o grupo de Telegram.');
+    } catch (error) {
+        console.error('Error al enviar mensaje a Telegram:', error.message);
+    }
+});
+
+// Manejar errores de servidor
+socket.on('error', (error) => {
+    console.error('Error en el servidor:', error.message);
+});
+
+// Manejar conexiones a socket.io
+socket.on('connect_error', (error) => {
+    console.error('Error de conexión con el servidor socket.io:', error.message);
 });
 
 // Manejar el comando /start
@@ -41,15 +58,27 @@ bot.start(async (ctx) => {
     }
 });
 
-// Manejar errores de servidor
-socket.on('error', (error) => {
-    console.error('Error en el servidor:', error.message);
-});
+// Función para enviar los datos al canal o grupo de Telegram con formato
+async function sendToTelegram(channelId, data) {
+    try {
+        // Obtener la fecha y hora actual
+        const currentDate = new Date();
+        const formattedDate = currentDate.toISOString().slice(0, 10);
+        const formattedTime = currentDate.toTimeString().slice(0, 8);
 
-// Manejar conexiones a socket.io
-socket.on('connect_error', (error) => {
-    console.error('Error de conexión con el servidor socket.io:', error.message);
-});
+        // Construir el mensaje con formato
+        const message = `Fecha: ${formattedDate}\nHora: ${formattedTime}\nDatos recibidos:\n${JSON.stringify(data)}`;
+
+        console.log('Intentando enviar mensaje a Telegram:', message);
+
+        // Envía el mensaje al canal o grupo de Telegram
+        await bot.telegram.sendMessage(channelId, message);
+
+        console.log('Mensaje enviado con éxito a Telegram.');
+    } catch (error) {
+        console.error('Error al enviar mensaje a Telegram:', error.message);
+    }
+}
 
 // Iniciar el bot de Telegram
 bot.launch().then(() => console.log('Bot de Telegram iniciado correctamente.'));

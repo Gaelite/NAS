@@ -1,6 +1,7 @@
 const { spawn } = require('child_process');
 const sqlite3 = require('sqlite3').verbose();
-const { get_device_neighbor_details, get_device_info } = require('./DeviceFinder.py');
+const io = require('socket.io-client');
+const { get_device_neighbor_details, get_device_info } = require('./DeviceFinder.py', './syslog.js');
 
 // Ruta del archivo de base de datos
 const dbPath = './network.db';
@@ -22,6 +23,39 @@ let db = new sqlite3.Database(dbPath, (err) => {
     console.log('Conectado a la base de datos network.db');
   }
 });
+
+// Conectar al servidor socket.io
+const socket = io(socketUrl);
+
+// Manejar eventos de conexión al servidor socket.io
+socket.on('connect', () => {
+    console.log('Conectado al servidor socket.io!');
+});
+
+// Manejar eventos de desconexión del servidor socket.io
+socket.on('disconnect', () => {
+    console.log('Desconectado del servidor socket.io');
+});
+
+// Manejar eventos de mensajes syslog desde el servidor socket.io
+socket.on('syslogActivity', async (log) => {
+    console.log('Actividad syslog recibida:', log);
+    // Insertar el log en la base de datos
+    insertSyslog(log);
+});
+
+// Función para insertar el log de syslog en la base de datos
+function insertSyslog(log) {
+  const insertSyslogQuery = 'INSERT INTO SyslogNotifications (deviceId, message) VALUES (?, ?)';
+  // Insertar en la tabla SyslogNotifications
+  db.run(insertSyslogQuery, [null, log], function(err) {
+      if (err) {
+          console.error('Error al insertar log de syslog:', err.message);
+      } else {
+          console.log('Log de syslog insertado correctamente');
+      }
+  });
+}
 
 // Insertar datos en la base de datos
 function insertData(all_devices) {
