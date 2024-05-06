@@ -20,6 +20,12 @@ socket.on('connect', () => {
     console.log('Conectado al servidor socket.io!');
 });
 
+socket.on('syslogActivity', async (log) => {
+    console.log('Actividad syslog recibida:', log);
+    // Procesa y envía a Telegram aquí
+});
+
+
 // Manejar eventos de desconexión del servidor socket.io
 socket.on('disconnect', () => {
     console.log('Desconectado del servidor socket.io');
