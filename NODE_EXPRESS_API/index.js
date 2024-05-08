@@ -5,6 +5,7 @@ import cors from 'cors';
 import { exec } from 'child_process';
 
 import usersRoutes from './routes/users.js';
+import confRoutes from './routes/conf.js';
 
 
 const app = express();
@@ -14,6 +15,7 @@ const PORT = 5000;
 app.use(bodyParser.json());
 
 app.use('/users', usersRoutes);
+app.use('/conf', confRoutes);
 
 app.get('/', (req,res) => {res.send('Hello from Homepage.');});
 
