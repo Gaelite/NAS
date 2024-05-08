@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption}from '../controllers/conf.js';
+import { getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH}from '../controllers/conf.js';
 
 const router = express.Router(); 
 
-// all routes in here are starting with /users
-router.get('/', test );
+// all routes in here are starting with /conf
+router.get('/ValidateSSH', verifySSH);
 //1
 router.post('/Topology', getTopology);
 //2
@@ -38,5 +38,7 @@ router.post('/SSHAuth',sshAuth);
 router.post('/SSHTime',sshTime);
 //16
 router.post('/Encryption',encryption);
+//17
+router.post('/SaveConf',saveRunn);
 
 export default router;

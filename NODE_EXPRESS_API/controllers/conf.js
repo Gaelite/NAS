@@ -1,8 +1,6 @@
 const cdCommand = `cd ../pyscript && `;
 import { NodeSSH } from 'node-ssh';
 
-
-
 export const verifySSH = async () => {
     const ssh = new NodeSSH();
 
