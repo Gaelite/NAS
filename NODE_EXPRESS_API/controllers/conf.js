@@ -1,13 +1,13 @@
 export const getTopology =  (req, res) => {
-    const pythonScriptPath = 'DeviceFinder.py'; // Ruta al archivo Python
-    const folderPath = '../pyscript'; // Ruta a la carpeta que deseas ingresar
-    // Comando para navegar a la carpeta deseada
-    const cdCommand = `cd ${folderPath} && `;
-    // Comando para ejecutar el script de Python
-    const pythonCommand = `python ${pythonScriptPath}`;
-    // Combinar los comandos para ejecutarlos en una sola llamada
-    const command = cdCommand + pythonCommand;
-    // Ejecutar el script de Python
+    const firstDevice = req.body;
+
+    const pythonScriptPath = 'DeviceFinder.py';
+    const cdCommand = `cd ../pyscript && `;
+    
+    const pythonCommand = `python ${pythonScriptPath} ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;
+
+    const command = cdCommand + pythonCommand ;
+
     exec(command, (error, stdout, stderr) => {
         if (error) {
             console.error(`Error al ejecutar el script de Python: ${error}`);
@@ -20,5 +20,9 @@ export const getTopology =  (req, res) => {
 };
 
 export const test = (req,res) => {
-    res.send("JALAAAA")
-}
+    
+
+    users.push({ ...user, id: uuidv4()});
+
+    res.send(`User with the same ${user.firstName} added to the database!`);
+};
