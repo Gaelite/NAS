@@ -102,15 +102,18 @@ def ssh_login(device_ip, username, password):
         print("Error al iniciar sesión SSH:", str(e))
         return None
     
-def change_hostname(ssh,hostname):
+#1
+def change_hostname(device_ip, username, password,hostname):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f"hostname {hostname}"
             ]
     
     ssh.send_config_set(config_commands)
-
-def change_int_ip(ssh,ip,mask,interface):
-
+    ssh.disconnect()
+#2
+def change_int_ip(device_ip, username, password,ip,mask,interface):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f'interface {interface}',
                 f'ip address {ip} {mask}',
@@ -118,26 +121,29 @@ def change_int_ip(ssh,ip,mask,interface):
             ]
     
     ssh.send_config_set(config_commands)
-
-def change_int_desc(ssh,interface,desc):
-
+    ssh.disconnect()
+#3
+def change_int_desc(device_ip, username, password,interface,desc):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f'interface {interface}',
                 f'description {desc}'
             ]
     
     ssh.send_config_set(config_commands)
-
-def change_motd(ssh,motd):
-
+    ssh.disconnect()
+#4
+def change_motd(device_ip, username, password,motd):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f'banner motd ^{motd}^'
             ]
     
     ssh.send_config_set(config_commands)
-
-def change_intv6_ip(ssh,ipv6,mask,interface):
-
+    ssh.disconnect()
+#5
+def change_intv6_ip(device_ip, username, password,ipv6,mask,interface):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f'interface {interface}',
                 f'ipv6 address {ipv6}{mask}',
@@ -145,34 +151,43 @@ def change_intv6_ip(ssh,ipv6,mask,interface):
             ]
     
     ssh.send_config_set(config_commands)
-
-def ipv6_unicast(ssh):
-
+    ssh.disconnect()
+#5
+def ipv6_unicast(device_ip, username, password):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 "ipv6 unicast-routing"
             ]
     
     ssh.send_config_set(config_commands)
-
-def ip_route(ssh,ip,mask,rute):
+    ssh.disconnect()
+#6
+def ip_route(device_ip, username, password,ip,mask,rute,DA):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
-                f'ip route {ip}{mask} {rute}'
+                f'ip route {ip} {mask} {rute} {DA}'
             ]
     ssh.send_config_set(config_commands)
-
-def ipv6_route(ssh,ipv6,mask,rute):
+    ssh.disconnect()
+#7
+def ipv6_route(device_ip, username, password,ipv6,mask,rute):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f'ip route {ipv6}{mask} {rute}'
             ]
     ssh.send_config_set(config_commands)
-
-def new_user(ssh,user,priv,secret):
+    ssh.disconnect()
+#8
+def new_user(device_ip, username, password,user,priv,secret):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
                 f"username {user} privilege {priv} secret {secret}"
             ]
     ssh.send_config_set(config_commands)
-
-def loggin_syn(ssh):
+    ssh.disconnect()
+#9
+def loggin_syn(device_ip, username, password):
+    ssh = ssh_login(device_ip, username, password)
     config_commands = [
         'line vty 0 15',
         'logging synchronous'
@@ -181,8 +196,67 @@ def loggin_syn(ssh):
         'logging synchronous'
     ]
     output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
+#10
+def conf_syslog(device_ip, username, password, serverIp):
+    ssh = ssh_login(device_ip, username, password)
+    config_commands = [
+        f'logging {serverIp}'
+        f'logging trap 0'
+        f'logging trap 1'
+        f'logging trap 2'
+        f'logging trap 3'
+        f'logging trap 4'
+    ]
+    output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
+#11
+def dhcp_v4(device_ip, username, password, dhcpPool,interfaceIp, network, mask, dnsServer, domainName):
+    ssh = ssh_login(device_ip, username, password)
+    config_commands = [
+        f'ip dhcp pool {dhcpPool}'
+        f'default-router {interfaceIp}'
+        f'network {network} {mask}'
+        f'dns-server {dnsServer}'
+        f'domain-name {domainName}'
+    ]
+    output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
+#12
+def ssh_authentication_retry(device_ip, username, password, retries):
+    ssh = ssh_login(device_ip, username, password)
+    config_commands = [
+        f'ip ssh authentication {retries}'
+    ]
+    output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
+#13
+def ssh_time_out(device_ip, username, password, timeOut):
+    ssh = ssh_login(device_ip, username, password)
+    config_commands = [
+        f'ip ssh time {timeOut}'
+    ]
+    output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
+#14
+def save_config(device_ip, username, password):
+    ssh = ssh_login(device_ip, username, password)
+    config_commands = [
+        'copy running-config startup-config'
+    ]
+    output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
+#15
+def password_encryption(device_ip, username, password):
+    ssh = ssh_login(device_ip, username, password)
+    config_commands = [
+        'service password-encryption'
+    ]
+    output = ssh.send_config_set(config_commands)
+    ssh.disconnect()
 
-
-def show_runn(ssh):
+def show_runn(device_ip, username, password):
+    ssh = ssh_login(device_ip, username, password)
     output = ssh.send_command("show ip interface brief")
+    ssh.disconnect()
     return output
