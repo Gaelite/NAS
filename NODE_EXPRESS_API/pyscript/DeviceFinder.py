@@ -22,12 +22,13 @@ try:
         username = sys.argv[2] #input("Hola username")
         password = sys.argv[3] #input("Hola password")
         secret = sys.argv[4] #input("Hola secret")
+        SyslogServer = sys.argv[5]
 
         while True:
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 # Lanzamos las tareas
                 devicet = executor.submit(get_device_info,ip,username,password,secret)
-                neighbor =executor.submit(get_device_neighbor_details,ip,username,password,secret)
+                neighbor =executor.submit(get_device_neighbor_details,ip,username,password,secret,SyslogServer)
                 # Obtenemos los resultados
                 current_device = devicet.result()#aqui no jala
                 neighbor_device,type = neighbor.result()#aqui no jala
