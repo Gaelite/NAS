@@ -1,4 +1,34 @@
 const cdCommand = `cd ../pyscript && `;
+import { NodeSSH } from 'node-ssh';
+
+
+
+export const verifySSH = async () => {
+    const ssh = new NodeSSH();
+
+    try {
+        const ip = await prompt('Ingrese la dirección IP: ');
+        const user = await prompt('Ingrese el nombre de usuario: ');
+        const password = await prompt('Ingrese la contraseña: ', { method: 'hide' });
+        const secret = await prompt('Ingrese el secreto: ', { method: 'hide' });
+
+        await ssh.connect({
+            host: ip,
+            username: user,
+            password: password
+        });
+
+        // Ejecuta comandos de SSH aquí si es necesario
+
+        console.log('Conexión SSH exitosa');
+        return 'success';
+    } catch (error) {
+        console.error('Error al conectarse a SSH:', error);
+        return 'error';
+    } finally {
+        ssh.dispose(); // Cierra la conexión SSH
+    }
+};
 
 export const getTopology =  (req, res) => {
     const firstDevice = req.body;
