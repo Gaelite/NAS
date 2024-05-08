@@ -369,6 +369,8 @@ export const encryption = (req,res) => {
         
     });
 }
+
+
 export const test = (req,res) => {
 
     res.send(`User with the s added to the database!`);
