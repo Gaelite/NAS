@@ -4,6 +4,32 @@ import sys
 import concurrent.futures
 from functions import get_device_neighbor_details, get_device_info
 import json
+import sqlite3
+
+
+
+def insert_data_to_database(data):
+    try:
+        conn = sqlite3.connect('C:/Users/valen/OneDrive/Documents/FINALREDES/NAS/network_data.db')  
+        c = conn.cursor()
+
+        for device in data:
+            c.execute('''INSERT INTO devices (deviceType, ip) VALUES (?, ?)''', (device['deviceType'], device['ip']))
+            device_id = c.lastrowid
+
+            for interface in device['interfaces']:
+                c.execute('''INSERT INTO interfaces (device_id, interface, IPv4, IPv6, link_local) VALUES (?, ?, ?, ?, ?)''',
+                          (device_id, interface['Interface'], interface['IPv4'], interface['IPv6'], interface['Link-local']))
+
+            for connection in device['connections']:
+                c.execute('''INSERT INTO connections (device_id, connected_from_interface, from_ip, connected_to_device, connected_to_interface, to_ip) VALUES (?, ?, ?, ?, ?, ?)''',
+                          (device_id, connection['Connected_from_Interface'], connection['From_IP'], connection['Device'], connection['Connected_to_Interface'], connection['To_IP']))
+
+        conn.commit()
+        conn.close()
+        print("Success")
+    except Exception as e:
+        print("Error:", e)
 
 try:
     if __name__ == "__main__":
@@ -85,6 +111,8 @@ try:
             })
             ind += 1
         res = json.dumps(json_Pack)
+        insert_data_to_database(json_Pack)
+
         print(res)
 except Exception as error:
         print("Error:",error)
