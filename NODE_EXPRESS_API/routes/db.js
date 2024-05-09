@@ -1,8 +1,7 @@
 import express from 'express';
 const router = express.Router();
-import { realizarConsulta } from './consultasController';
+import { realizarConsulta } from '../controllers/consultasController.js'; // Corrected file extension
 
-// Ruta para manejar las consultas
 router.get('/consultas', realizarConsulta);
 
 export default router;
