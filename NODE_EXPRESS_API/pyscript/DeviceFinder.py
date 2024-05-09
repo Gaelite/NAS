@@ -49,6 +49,7 @@ try:
         password = sys.argv[3] #input("Hola password")
         secret = sys.argv[4] #input("Hola secret")
         SyslogServer = sys.argv[5]
+        print(ip)
 
         while True:
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:

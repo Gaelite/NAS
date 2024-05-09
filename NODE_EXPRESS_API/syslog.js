@@ -1,7 +1,7 @@
-const dgram = require('dgram');
-const { Telegraf } = require('telegraf');
+import dgram from 'dgram'
+import { Telegraf } from 'telegraf';
 
-const HOST = '192.168.0.18';
+const HOST = '192.168.1.18';
 const PORT = 514;
 
 // Token de tu bot de Telegram
