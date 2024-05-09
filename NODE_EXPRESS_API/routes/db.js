@@ -1,10 +1,8 @@
-
-
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const consultasController = require('./consultasController');
+import { realizarConsulta } from './consultasController';
 
 // Ruta para manejar las consultas
-router.get('/consultas', consultasController.realizarConsulta);
+router.get('/consultas', realizarConsulta);
 
-module.exports = router;
+export default router;
