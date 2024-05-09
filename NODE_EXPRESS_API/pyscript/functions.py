@@ -67,7 +67,8 @@ def get_device_info(ip, username, password, enable_secret):
 
     except Exception as error:
         return error
-
+    #aqui va
+    print('a')
     ssh_connection.enable()#Activa modo EXEC privilegiado
 
     int_brief_result = ssh_connection.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
