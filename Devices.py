@@ -4,7 +4,7 @@ class Device:
         self.ip = ip
         self.interfaces = []
         self.connections = []
-        self.caca
+    
 
     def set_interfaces(self,intv4,intv6):
         index = 3

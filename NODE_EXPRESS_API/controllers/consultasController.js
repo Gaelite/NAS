@@ -1,8 +1,7 @@
 import sqlite3 from 'sqlite3';
 
-// Function to perform the database query
 export const realizarConsulta = (req, res) => {
-    const query = req.query.q; // Assuming the 'q' parameter contains the query
+    const query = req.query.q; 
     const db = new sqlite3.Database('network_data.db');
 
     db.all(query, (err, rows) => {

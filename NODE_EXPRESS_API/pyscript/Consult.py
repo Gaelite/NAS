@@ -18,5 +18,4 @@ def query_data_from_database():
     except Exception as e:
         print("Error:", e)
 
-# Llama a esta función para realizar la consulta a la base de datos
 query_data_from_database()
