@@ -3,17 +3,17 @@ import textfsm
 from functions import get_device_neighbor_details, get_device_info
 device = {
         'device_type': 'cisco_ios', 
-        'host': '192.168.1.1',
+        'host': '192.168.1.2',
         'username': 'gmedina',
         'password': 'cisco',
     }
 
-cdp_template = textfsm.TextFSM(open("Templates/show_cdp_neighbor_detail.textfsm"))
+cdp_template = textfsm.TextFSM(open("Templates/cisco_ios_show_version.textfsm"))
 try:
     ssh_session = ConnectHandler(**device)
     cdp_result= ssh_session.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
 
-    cdp_result += ssh_session.send_command("show cdp neighbor detail", delay_factor=2)#te consigue la informacion CD
+    cdp_result += ssh_session.send_command("show version", delay_factor=2)#te consigue la informacion CD
     #procesar info para enviar a servidor
     fsm_cdp_results = cdp_template.ParseText(cdp_result)
     print(fsm_cdp_results)
