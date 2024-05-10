@@ -4,6 +4,9 @@ class Device:
         self.ip = ip
         self.interfaces = []
         self.connections = []
+        self.version = None
+        self.modelo = None
+        self.numeroSerie = None
 
     def set_interfaces(self,intv4,intv6):
         index = 3

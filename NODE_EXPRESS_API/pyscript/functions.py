@@ -50,6 +50,7 @@ def get_device_info(ip, username, password, enable_secret):
     try:
         int_brief_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ip_interface_brief.textfsm"))
         intv6_brief_template = textfsm.TextFSM(open("Templates/cisco_ios_show_ipv6_interface_brief.txtfsm"))
+        version_template = textfsm.TextFSM(open("Templates/cisco_ios_show_version.textfsm"))
         ssh_connection = []
         int_brief_result = []
         intv6_brief_result = []
@@ -73,23 +74,26 @@ def get_device_info(ip, username, password, enable_secret):
 
     int_brief_result = ssh_connection.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
     intv6_brief_result = int_brief_result
+    version_result = int_brief_result
     #Informacion de interfaces
     int_brief_result += ssh_connection.send_command("show ip interface brief", delay_factor=2)#te consigue la informacion de interfaces del dispositivo
 
     intv6_brief_result += ssh_connection.send_command("show ipv6 interface brief", delay_factor=2)#te consigue la informacion de interfaces del dispositivo
 
+    version_result += ssh_connection.send_command("show version", delay_factor=2)#te consigue la informacion del dispositivo
     #Desconectar SSH
     ssh_connection.disconnect()
 
     #procesar info para enviar a servidor
     fsm_int_results = int_brief_template.ParseText(int_brief_result)
     fsm_intv6_results = intv6_brief_template.ParseText(intv6_brief_result)
+    version_result = version_template.ParseText(version_result)
 
     for x in fsm_intv6_results:
         if x[1][0] == "unassigned":
             x[1].append("unassigned")
 
-    result =[fsm_int_results,fsm_intv6_results]
+    result =[fsm_int_results,fsm_intv6_results,version_result]
 
     return result
 
