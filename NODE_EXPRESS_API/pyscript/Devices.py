@@ -7,6 +7,10 @@ class Device:
         self.SysVersion = None
         self.modelo = None
         self.numeroSerie = None
+        self.internet = False
+
+    def set_internet(self):
+        self.internet = True
 
     def set_interfaces(self,intv4,intv6):
         index = 3
