@@ -1,6 +1,24 @@
-const cdCommand = `cd ../pyscript && `;
 import { NodeSSH } from 'node-ssh';
+import { exec } from 'child_process';
+const cdCommand = `cd ./pyscript && `;
 
+export const test4 = (req, res) => {
+    const firstDevice = req.body;
+    const pythonScriptPath = 'test.py';
+    
+    const pythonCommand = `py ${pythonScriptPath} ${firstDevice.ip} `;
+
+    const command = cdCommand + pythonCommand ;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.send(stdout);
+    });
+};
 export const verifySSH = async () => {
     const ssh = new NodeSSH();
 
@@ -30,7 +48,6 @@ export const verifySSH = async () => {
 
 export const getTopology =  (req, res) => {
     const firstDevice = req.body;
-
     const pythonScriptPath = 'DeviceFinder.py';
     
     const pythonCommand = `python ${pythonScriptPath} ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;

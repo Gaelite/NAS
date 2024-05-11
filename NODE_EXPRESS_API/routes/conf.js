@@ -1,11 +1,14 @@
 import express from 'express';
 
-import { getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH}from '../controllers/conf.js';
+import { test4,getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH}from '../controllers/conf.js';
+import { exec } from 'child_process';
 
 const router = express.Router(); 
 
 // all routes in here are starting with /conf
-router.get('/ValidateSSH', verifySSH);
+router.post('/prueba',test4);
+
+router.post('/ValidateSSH', verifySSH);
 //1
 router.post('/Topology', getTopology);
 //2
