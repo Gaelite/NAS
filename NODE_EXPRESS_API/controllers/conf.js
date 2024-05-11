@@ -19,22 +19,20 @@ export const test4 = (req, res) => {
         res.send(stdout);
     });
 };
-export const verifySSH = async () => {
+export const verifySSH = async (req, res) => {
     const ssh = new NodeSSH();
 
     try {
-        const ip = await prompt('Ingrese la dirección IP: ');
-        const user = await prompt('Ingrese el nombre de usuario: ');
-        const password = await prompt('Ingrese la contraseña: ', { method: 'hide' });
-        const secret = await prompt('Ingrese el secreto: ', { method: 'hide' });
+        const ip =  prompt('Ingrese la dirección IP: ');
+        const user =  prompt('Ingrese el nombre de usuario: ');
+        const password =  prompt('Ingrese la contraseña: ', { method: 'hide' });
 
+        // Conexión SSH
         await ssh.connect({
             host: ip,
             username: user,
             password: password
         });
-
-        // Ejecuta comandos de SSH aquí si es necesario
 
         console.log('Conexión SSH exitosa');
         return 'success';
@@ -42,7 +40,7 @@ export const verifySSH = async () => {
         console.error('Error al conectarse a SSH:', error);
         return 'error';
     } finally {
-        ssh.dispose(); // Cierra la conexión SSH
+        ssh.dispose(); 
     }
 };
 
