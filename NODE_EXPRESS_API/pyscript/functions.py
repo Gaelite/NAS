@@ -23,11 +23,11 @@ def get_device_neighbor_details(ip, username, password, enable_secret,SyslogServ
 
     ssh_connection.enable()#Activa modo EXEC privilegiado
 
-    #config_commands = [
-     #   f'logging {SyslogServer}'
-    #]
+    config_commands = [
+        f'logging {SyslogServer}'
+    ]
 
-    #output = ssh_connection.send_config_set(config_commands)
+    output = ssh_connection.send_config_set(config_commands)
 
     cdp_result= ssh_connection.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
     type_result = cdp_result
