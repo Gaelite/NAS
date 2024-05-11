@@ -6,7 +6,7 @@ import { exec } from 'child_process';
 
 import usersRoutes from './routes/users.js';
 import confRoutes from './routes/conf.js';
-
+import databaseRoutes from './routes/db.js';
 
 const app = express();
 app.use(cors());
@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use('/users', usersRoutes);
 app.use('/conf', confRoutes);
+app.use('/db', databaseRoutes);
 
 app.get('/', (req,res) => {res.send('Hello from Homepage.');});
 

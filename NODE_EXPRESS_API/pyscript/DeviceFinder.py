@@ -10,7 +10,7 @@ import sqlite3
 
 def insert_data_to_database(data):
     try:
-        conn = sqlite3.connect('C:/Users/valen/OneDrive/Documents/FINALREDES/NAS/network_data.db')  
+        conn = sqlite3.connect('C:/Users/eduar/OneDrive/Documentos/MisProyectos/NAS/NODE_EXPRESS_API/pyscript/network_data.db')  
         c = conn.cursor()
 
         for device in data:
@@ -35,7 +35,7 @@ try:
     if __name__ == "__main__":
 
         all_devices = []
-        used_IPs = []
+        used_IPs = ['148.239.61.210']
         unused_IPs = []
         neighbor_device = []
         deviceNum = 0
@@ -51,6 +51,7 @@ try:
         SyslogServer = sys.argv[5]
 
         while True:
+            #print(ip)
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 # Lanzamos las tareas
                 devicet = executor.submit(get_device_info,ip,username,password,secret)
