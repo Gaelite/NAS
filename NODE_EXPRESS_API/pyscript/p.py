@@ -9,14 +9,15 @@ device = {
     }
 
 cdp_template = textfsm.TextFSM(open("Templates/cisco_ios_show_version.textfsm"))
-try:
-    ssh_session = ConnectHandler(**device)
-    cdp_result= ssh_session.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
 
-    cdp_result += ssh_session.send_command("show version", delay_factor=2)#te consigue la informacion CD
+ssh_session = ConnectHandler(**device)
+cdp_result= ssh_session.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
+
+cdp_result += ssh_session.send_command("show version", delay_factor=2)#te consigue la informacion CD
     #procesar info para enviar a servidor
-    fsm_cdp_results = cdp_template.ParseText(cdp_result)
-    print(fsm_cdp_results)
-    ssh_session.disconnect()
-except Exception as e:
-    print("Error al iniciar sesión SSH:", str(e))
+fsm_cdp_results = cdp_template.ParseText(cdp_result)
+y = 0
+for x in fsm_cdp_results[0]:
+    print(f'{y}. {x}\n')
+    y += 1
+ssh_session.disconnect()

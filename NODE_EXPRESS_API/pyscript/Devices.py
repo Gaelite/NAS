@@ -4,7 +4,7 @@ class Device:
         self.ip = ip
         self.interfaces = []
         self.connections = []
-        self.version = None
+        self.SysVersion = None
         self.modelo = None
         self.numeroSerie = None
 
@@ -49,9 +49,17 @@ class Device:
 
         return device_dict
         
+    def setInfo(self,version,model,serial):
+        self.SysVersion = version
+        self.modelo = model
+        self.numeroSerie = serial
+
     def __str__(self):
         device_str = f"Device Type: {self.deviceType}\n"
         device_str += f"IP Address: {self.ip}\n"
+        device_str += f"System version: {self.SysVersion}\n"
+        device_str += f"Model: {self.modelo}\n"
+        device_str += f"Serial: {self.numeroSerie}\n"
 
         if self.interfaces:
             device_str += "Interfaces:\n"

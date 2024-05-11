@@ -49,7 +49,6 @@ try:
         password = sys.argv[3] #input("Hola password")
         secret = sys.argv[4] #input("Hola secret")
         SyslogServer = sys.argv[5]
-        print(ip)
 
         while True:
             with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
@@ -74,10 +73,13 @@ try:
                             local_Ip = z["IPv4"]
                             all_devices[deviceNum].set_connections(neighbor_device[x][4],local_Ip, type[x][2], neighbor_device[x][5], neighbor_device[x][2])
 
+                all_devices[deviceNum].setInfo(current_device[2][0][14][0],current_device[2][0][0],current_device[2][0][1])
+
                 for x in all_devices[deviceNum].interfaces:
                     if x["IPv4"] != 'unassigned':
                         used_IPs.append(x["IPv4"])
-                    
+                        if x["IPv4"] in unused_IPs:
+                            unused_IPs.remove(x["IPv4"])
 
                 if ip not in used_IPs:
                     used_IPs.append(ip)
@@ -94,6 +96,8 @@ try:
                     deviceNum += 1
                     ip = unused_IPs[0]
 
+                #print('Usadas:',used_IPs,'No usadas: ',unused_IPs)
+
                 for x in unused_IPs:
                     if x in used_IPs:
                         unused_IPs.remove(x)
@@ -107,10 +111,14 @@ try:
             json_Pack.append({
                 'deviceType': device.deviceType,
                 'ip': device.ip,
+                'SystemVersion': device.SysVersion,
+                'Model': device.modelo,
+                'Serie': device.numeroSerie,
                 'interfaces': interfaces,
                 'connections': connections
             })
             ind += 1
+            print(device)
         res = json.dumps(json_Pack)
         insert_data_to_database(json_Pack)
 
