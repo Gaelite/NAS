@@ -21,56 +21,26 @@ export const test4 = (req, res) => {
     });
 };
 
-export const verifySSH = async (req, res) => {
-    const { ip, user, password, syslogIP, secret } = req.body;
-  
-    // Validate IP address format
-    if (typeof ip !== 'string' || ip.trim() === '') {
-      return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
-    }
-  
-    const ipBlocks = ip.split('.');
-    if (ipBlocks.length !== 4 || ipBlocks.some(block => isNaN(parseInt(block, 10)) || parseInt(block, 10) < 0 || parseInt(block, 10) > 255)) {
-      return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
-    }
+export const verifySSH = (req, res) => {
+    const firstDevice = req.body;
+    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/SSH.py';
+    const ip = firstDevice.ip;
+    const user = firstDevice.user;
+    const password = firstDevice.password;
+    const syslogIP = firstDevice.syslogIP;
+    const secret = firstDevice.secret;
 
-    const SSHConfig = {
-        host: '',
-        username: '',
-        password: '',
-        privateKey: readFileSync('/home/itsvaalentine/.ssh/id_rsa.pub')
-    };
-  
-    // Create a configuration object without optional secret field
-    const config = {
-      host: ip,
-      username: user,
-      password,
-    };
-    if (secret) {
-      config.privateKey = secret; // Assuming the secret is a private key string
-    }
-    
-    let client;
-    try {
-      // Establish SSH connection using the configuration
-      const client = new Client();
-      await client.connect(config);
-  
-      console.log('Conexión SSH exitosa');
-      console.log('Servidor syslog IP:', syslogIP);
-  
-      return res.status(200).json({ status: 'success', ipBlocks: ipBlocks });
-  
-    } catch (error) {
-      console.error('Error al conectarse a SSH:', error);
-      return res.status(500).json({ status: 'error', message: 'Error al conectarse a SSH' });
-    } finally {
-      if (client) {
-        await client.end();
-      }
-    }
-  };
+    const command = `python ${pythonScriptPath} ${ip} ${user} ${password} ${syslogIP} ${secret || ''}`;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(JSON.parse(stdout));
+    });
+};
 
 
 
