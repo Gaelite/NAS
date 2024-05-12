@@ -3,6 +3,8 @@ import { readFileSync } from 'fs';
 const cdCommand = `cd ./pyscript && `;
 
 
+
+
 export const test4 = (req, res) => {
     const firstDevice = req.body;
     const pythonScriptPath = 'test.py';
