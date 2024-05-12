@@ -59,9 +59,10 @@ def insert_data(json_data):
         for connection in device['connections']:
             c.execute('INSERT INTO connections (device_id, connected_from_interface, from_ip, connected_to_device, connected_to_interface, to_ip) VALUES (?, ?, ?, ?, ?, ?)',
                       (device_id, connection['Connected_from_Interface'], connection['From_IP'], connection['Device'], connection['Connected_to_Interface'], connection['To_IP']))
-
+        
     conn.commit()
     conn.close()
+    print("Database update complete.")
 
 
-create_database_schema()
+

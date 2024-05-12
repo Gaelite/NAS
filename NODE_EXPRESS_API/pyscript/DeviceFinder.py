@@ -14,7 +14,8 @@ def insert_data_to_database(data):
         c = conn.cursor()
 
         for device in data:
-            c.execute('''INSERT INTO devices (deviceType, ip) VALUES (?, ?)''', (device['deviceType'], device['ip']))
+            c.execute('INSERT INTO devices (deviceType, ip, SystemVersion, Model, Serie) VALUES (?, ?, ?, ?, ?)',
+                  (device['deviceType'], device['ip'], device['SystemVersion'], device['Model'], device['Serie']))
             device_id = c.lastrowid
 
             for interface in device['interfaces']:
