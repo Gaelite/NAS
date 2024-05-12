@@ -9,7 +9,10 @@ def create_database_schema():
     c.execute('''CREATE TABLE IF NOT EXISTS devices (
                     id INTEGER PRIMARY KEY,
                     deviceType TEXT,
-                    ip TEXT
+                    ip TEXT,
+                    SystemVersion TEXT,
+                    Model TEXT,
+                    Serie TEXT
                 )''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS interfaces (
@@ -43,7 +46,8 @@ def insert_data(json_data):
 
     for device in json_data:
         # Insert device information
-        c.execute('INSERT INTO devices (deviceType, ip) VALUES (?, ?)', (device['deviceType'], device['ip']))
+        c.execute('INSERT INTO devices (deviceType, ip, SystemVersion, Model, Serie) VALUES (?, ?, ?, ?, ?)',
+                  (device['deviceType'], device['ip'], device['SystemVersion'], device['Model'], device['Serie']))
         device_id = c.lastrowid
 
         # Insert interfaces
@@ -61,4 +65,3 @@ def insert_data(json_data):
 
 
 create_database_schema()
-

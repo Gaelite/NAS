@@ -6,8 +6,9 @@ def query_data_from_database():
         c = conn.cursor()
 
         # Ejemplo de consulta para obtener los dispositivos y sus interfaces
-        c.execute('''SELECT d.deviceType, d.ip, i.interface, i.IPv4, i.IPv6 FROM devices AS d
-                     INNER JOIN interfaces AS i ON d.id = i.device_id''')
+        c.execute('''SELECT d.deviceType, d.ip, d.SystemVersion, d.Model, d.Serie, i.interface, i.IPv4, i.IPv6 
+             FROM devices AS d
+             INNER JOIN interfaces AS i ON d.id = i.device_id''')
         rows = c.fetchall()
 
         # Imprimir los resultados
