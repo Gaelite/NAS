@@ -1,4 +1,5 @@
-import { NodeSSH } from 'node-ssh';
+import { parse } from 'ssh2-config';
+import { Client } from 'ssh2';
 import { exec } from 'child_process';
 import readline from 'readline';
 const cdCommand = `cd ./pyscript && `;
@@ -28,40 +29,50 @@ export const test4 = (req, res) => {
 };
 
 export const verifySSH = async (req, res) => {
-    const { ip, user, password, syslogIP, secret } = req.body; // Cambiando 'username' a 'user' y agregando el campo 'secret'
-    const ssh = new NodeSSH();
-    let ipBlocks;
-    if (typeof ip === 'string' && ip.trim() !== '') {
-        ipBlocks = ip.split('.');
-        if (ipBlocks.length !== 4 || ipBlocks.some(block => isNaN(parseInt(block, 10)) || parseInt(block, 10) < 0 || parseInt(block, 10) > 255)) {
-            return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
-        }
-    } else {
-        return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
+    const { ip, user, password, syslogIP, secret } = req.body;
+  
+    // Validate IP address format
+    if (typeof ip !== 'string' || ip.trim() === '') {
+      return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
     }
-
+  
+    const ipBlocks = ip.split('.');
+    if (ipBlocks.length !== 4 || ipBlocks.some(block => isNaN(parseInt(block, 10)) || parseInt(block, 10) < 0 || parseInt(block, 10) > 255)) {
+      return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
+    }
+  
+    // Create a configuration object with optional secret field
+    const config = {
+      host: ip,
+      username: user,
+      password,
+    };
+    if (secret) {
+      config.privateKey = secret; // Assuming the secret is a private key string
+    }
+  
     try {
-        // SSH Connection
-        await ssh.connect({
-            host: ip,
-            user: user, // Cambiando 'username' a 'user'
-            password: password,
-            privateKey: secret // Agregando el campo 'secret'
-        });
-
-        console.log('Conexión SSH exitosa');
-        console.log('Servidor syslog IP:', syslogIP);
-
-        return res.status(200).json({ status: 'success', ipBlocks: ipBlocks, secret: secret }); // Agregando el campo 'secret'
-
+      // Parse SSH configuration (handle potential errors)
+      const parsedConfig = await parse(config);
+  
+      // Establish SSH connection using the parsed configuration
+      const client = new Client();
+      await client.connect(parsedConfig);
+  
+      console.log('Conexión SSH exitosa');
+      console.log('Servidor syslog IP:', syslogIP);
+  
+      return res.status(200).json({ status: 'success', ipBlocks: ipBlocks });
+  
     } catch (error) {
-        console.error('Error al conectarse a SSH:', error);
-        return res.status(500).json({ status: 'error', message: 'Error al conectarse a SSH' });
+      console.error('Error al conectarse a SSH:', error);
+      return res.status(500).json({ status: 'error', message: 'Error al conectarse a SSH' });
     } finally {
-        ssh.dispose(); 
+      if (client) {
+        await client.end();
+      }
     }
-};
-
+  };
 
 
 export const getTopology =  (req, res) => {
