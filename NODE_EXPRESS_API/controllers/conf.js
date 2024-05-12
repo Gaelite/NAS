@@ -28,7 +28,7 @@ export const test4 = (req, res) => {
 };
 
 export const verifySSH = async (req, res) => {
-    const { ip, username, password, syslogIP } = req.body;
+    const { ip, user, password, syslogIP, secret } = req.body; // Cambiando 'username' a 'user' y agregando el campo 'secret'
     const ssh = new NodeSSH();
     let ipBlocks;
     if (typeof ip === 'string' && ip.trim() !== '') {
@@ -44,14 +44,15 @@ export const verifySSH = async (req, res) => {
         // SSH Connection
         await ssh.connect({
             host: ip,
-            username: username,
-            password: password
+            user: user, // Cambiando 'username' a 'user'
+            password: password,
+            privateKey: secret // Agregando el campo 'secret'
         });
 
         console.log('Conexión SSH exitosa');
         console.log('Servidor syslog IP:', syslogIP);
 
-        return res.status(200).json({ status: 'success', ipBlocks: ipBlocks });
+        return res.status(200).json({ status: 'success', ipBlocks: ipBlocks, secret: secret }); // Agregando el campo 'secret'
 
     } catch (error) {
         console.error('Error al conectarse a SSH:', error);
@@ -60,6 +61,7 @@ export const verifySSH = async (req, res) => {
         ssh.dispose(); 
     }
 };
+
 
 
 export const getTopology =  (req, res) => {
