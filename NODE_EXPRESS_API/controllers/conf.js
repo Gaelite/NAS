@@ -27,16 +27,17 @@ export const test4 = (req, res) => {
     });
 };
 
-export const verifySSH = async (ip, username, password, syslogIP) => {
+export const verifySSH = async (req, res) => {
+    const { ip, username, password, syslogIP } = req.body;
     const ssh = new NodeSSH();
     let ipBlocks;
     if (typeof ip === 'string' && ip.trim() !== '') {
         ipBlocks = ip.split('.');
         if (ipBlocks.length !== 4 || ipBlocks.some(block => isNaN(parseInt(block, 10)) || parseInt(block, 10) < 0 || parseInt(block, 10) > 255)) {
-            return { status: 'error', message: 'Formato de dirección IP incorrecto' };
+            return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
         }
     } else {
-        return { status: 'error', message: 'Formato de dirección IP incorrecto' };
+        return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
     }
 
     try {
@@ -50,15 +51,16 @@ export const verifySSH = async (ip, username, password, syslogIP) => {
         console.log('Conexión SSH exitosa');
         console.log('Servidor syslog IP:', syslogIP);
 
-        return { status: 'success', ipBlocks: ipBlocks };
+        return res.status(200).json({ status: 'success', ipBlocks: ipBlocks });
 
     } catch (error) {
         console.error('Error al conectarse a SSH:', error);
-        return { status: 'error', message: 'Error al conectarse a SSH' };
+        return res.status(500).json({ status: 'error', message: 'Error al conectarse a SSH' });
     } finally {
         ssh.dispose(); 
     }
 };
+
 
 export const getTopology =  (req, res) => {
     const firstDevice = req.body;
