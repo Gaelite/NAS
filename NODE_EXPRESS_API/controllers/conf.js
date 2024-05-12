@@ -21,6 +21,7 @@ export const test4 = (req, res) => {
     });
 };
 
+
 export const verifySSH = (req, res) => {
     const firstDevice = req.body;
     const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/SSH.py';
@@ -38,9 +39,20 @@ export const verifySSH = (req, res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        // Parse the JSON response from the Python script
+        let jsonResponse;
+        try {
+            jsonResponse = JSON.parse(stdout);
+        } catch (parseError) {
+            console.error(`Error al analizar la salida JSON del script de Python: ${parseError}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(jsonResponse);
     });
 };
+
+
 
 
 

@@ -15,6 +15,7 @@
     "dgram": "^1.0.1",
     "express": "^4.19.2",
     "node-ssh": "^13.2.0",
+    "paramiko": "^0.0.1",
     "sqlite3": "^5.1.7",
     "ssh-config": "^4.4.4",
     "ssh2-config": "^0.1.0",
