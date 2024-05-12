@@ -1,13 +1,6 @@
-import { parse } from 'ssh2-config';
-import { Client } from 'ssh2';
 import { exec } from 'child_process';
-import readline from 'readline';
+import { readFileSync } from 'fs';
 const cdCommand = `cd ./pyscript && `;
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-
 
 
 export const test4 = (req, res) => {
@@ -40,8 +33,15 @@ export const verifySSH = async (req, res) => {
     if (ipBlocks.length !== 4 || ipBlocks.some(block => isNaN(parseInt(block, 10)) || parseInt(block, 10) < 0 || parseInt(block, 10) > 255)) {
       return res.status(400).json({ status: 'error', message: 'Formato de dirección IP incorrecto' });
     }
+
+    const SSHConfig = {
+        host: '',
+        username: '',
+        password: '',
+        privateKey: readFileSync('/home/itsvaalentine/.ssh/id_rsa.pub')
+    };
   
-    // Create a configuration object with optional secret field
+    // Create a configuration object without optional secret field
     const config = {
       host: ip,
       username: user,
@@ -50,14 +50,12 @@ export const verifySSH = async (req, res) => {
     if (secret) {
       config.privateKey = secret; // Assuming the secret is a private key string
     }
-  
+    
+    let client;
     try {
-      // Parse SSH configuration (handle potential errors)
-      const parsedConfig = await parse(config);
-  
-      // Establish SSH connection using the parsed configuration
+      // Establish SSH connection using the configuration
       const client = new Client();
-      await client.connect(parsedConfig);
+      await client.connect(config);
   
       console.log('Conexión SSH exitosa');
       console.log('Servidor syslog IP:', syslogIP);
@@ -73,6 +71,7 @@ export const verifySSH = async (req, res) => {
       }
     }
   };
+
 
 
 export const getTopology =  (req, res) => {
