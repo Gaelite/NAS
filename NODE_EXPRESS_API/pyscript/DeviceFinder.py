@@ -10,11 +10,12 @@ import sqlite3
 
 def insert_data_to_database(data):
     try:
-        conn = sqlite3.connect('C:/Users/eduar/OneDrive/Documentos/MisProyectos/NAS/NODE_EXPRESS_API/pyscript/network_data.db')  
+        conn = sqlite3.connect('C:/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/network_data.db')  
         c = conn.cursor()
 
         for device in data:
-            c.execute('''INSERT INTO devices (deviceType, ip) VALUES (?, ?)''', (device['deviceType'], device['ip']))
+            c.execute('INSERT INTO devices (deviceType, ip, SystemVersion, Model, Serie) VALUES (?, ?, ?, ?, ?)',
+                  (device['deviceType'], device['ip'], device['SystemVersion'], device['Model'], device['Serie']))
             device_id = c.lastrowid
 
             for interface in device['interfaces']:

@@ -2,7 +2,7 @@ import sqlite3
 
 def query_data_from_database():
     try:
-        conn = sqlite3.connect('C:/Users/eduar/OneDrive/Documentos/MisProyectos/NAS/NODE_EXPRESS_API/pyscript/network_data.db')  
+        conn = sqlite3.connect('C:/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/network_data.db')  
         c = conn.cursor()
 
         # Ejemplo de consulta para obtener los dispositivos y sus interfaces
