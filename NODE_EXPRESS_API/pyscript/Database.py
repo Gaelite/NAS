@@ -2,7 +2,7 @@ import sqlite3
 
 # Function to create the database schema
 def create_database_schema():
-    conn = sqlite3.connect('network_data.db')
+    conn = sqlite3.connect('network_data1.db')
     c = conn.cursor()
 
     # Create tables for devices, interfaces, and connections
