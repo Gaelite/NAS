@@ -8,7 +8,7 @@ const router = express.Router();
 // all routes in here are starting with /conf
 router.get('/prueba', (req,res) =>{res.send("hpola")});
 
-router.post('/ValidateSSH', verifySSH);
+router.post('/VerifySSH', verifySSH);
 //1
 router.post('/Topology', getTopology);
 //2
