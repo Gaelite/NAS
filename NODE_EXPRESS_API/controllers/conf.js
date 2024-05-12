@@ -22,16 +22,16 @@ export const test4 = (req, res) => {
 };
 
 
-export const verifySSH = (req, res) => {
-    const firstDevice = req.body;
-    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/SSH.py';
-    const ip = firstDevice.ip;
-    const user = firstDevice.user;
-    const password = firstDevice.password;
-    const syslogIP = firstDevice.syslogIP;
-    const secret = firstDevice.secret;
 
-    const command = `python ${pythonScriptPath} ${ip} ${user} ${password} ${syslogIP} ${secret || ''}`;
+
+export const verifySSH = (req, res) => {
+    const { ip, user, password, syslogIP, secret, port } = req.body;
+
+    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/SSH.py';
+
+    const command = `python ${pythonScriptPath} "${ip}" "${user}" "${password}" "${syslogIP}" "${secret || ''}" "${port || '22'}"`;
+
+    console.log(ip, user, password, secret )
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -39,7 +39,11 @@ export const verifySSH = (req, res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        // Parse the JSON response from the Python script
+        if (stdout.startsWith('Error')) {
+            console.error(`Error devuelto por el script de Python: ${stdout}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
         let jsonResponse;
         try {
             jsonResponse = JSON.parse(stdout);
@@ -51,7 +55,6 @@ export const verifySSH = (req, res) => {
         res.json(jsonResponse);
     });
 };
-
 
 
 
