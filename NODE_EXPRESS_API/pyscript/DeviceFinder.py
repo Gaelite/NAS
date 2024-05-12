@@ -70,7 +70,7 @@ try:
                 #creo un objeto tipo device
                 all_devices.append(Device(ip))      
                 all_devices[deviceNum].set_interfaces(current_device[0],current_device[1],current_device[2][0][4])
-                print(hostnamesNei)
+
                 for x in range(len(neighbor_device)):
                     all_devices[deviceNum].interfaces
                     if neighbor_device[x][0] == current_device[0][0]:
@@ -78,7 +78,6 @@ try:
                     for z in all_devices[deviceNum].interfaces:
                         if z["Interface"] == neighbor_device[x][5] or z["Interface"] == "Vlan1":
                             local_Ip = z["IPv4"]
-                            print(hostNum)
                             all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname,neighbor_device[x][4],local_Ip,hostnamesNei[hostNum], type[x][2], neighbor_device[x][5], neighbor_device[x][2])
                             if len(hostnamesNei)-1 > hostNum:
                                 hostNum += 1
@@ -122,6 +121,7 @@ try:
             interfaces = [{'Interface': i['Interface'], 'IPv4': i['IPv4'], 'IPv6': i['IPv6'], 'Link-local': i['Link-local']} for i in device.interfaces]
             connections = [{"MyHost":device.hostname,'Connected_from_Interface': c['Connected_from_Interface'], 'From_IP': c['From_IP'],'HostNei': c['HostNei'], 'Device': c['Device'], 'Connected_to_Interface': c['Connected_to_Interface'], 'To_IP': c['To_IP']} for c in device.connections]
             json_Pack.append({
+                'hostname': device.hostname,
                 'deviceType': device.deviceType,
                 'ip': device.ip,
                 'SystemVersion': device.SysVersion,

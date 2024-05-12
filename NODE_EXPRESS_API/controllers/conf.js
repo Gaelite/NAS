@@ -2,25 +2,15 @@ import { exec } from 'child_process';
 import { readFileSync } from 'fs';
 const cdCommand = `cd ./pyscript && `;
 
-
+let First_Device = "";
+let ValidatedUser = "";
+let ValidatedPassword = "";
+let ValidatedSecret = "";
+let SyslogServer = "";
 
 
 export const test4 = (req, res) => {
-    const firstDevice = req.body;
-    const pythonScriptPath = 'test.py';
-    
-    const pythonCommand = `py ${pythonScriptPath} ${firstDevice.ip} `;
-
-    const command = cdCommand + pythonCommand ;
-
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error al ejecutar el script de Python: ${error}`);
-            res.status(500).send('Error interno del servidor');
-            return;
-        }
-        res.send(stdout);
-    });
+        res.send(ValidatedPassword,ValidatedUser,ValidatedSecret,SyslogServer);
 };
 
 
@@ -54,6 +44,11 @@ export const verifySSH = (req, res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
+        ValidatedUser = user;
+        ValidatedPassword = password;
+        ValidatedSecret = secret; 
+        SyslogServer = syslogIP;
+        First_Device = ip;
         res.json(jsonResponse);
     });
 };
@@ -65,7 +60,7 @@ export const getTopology =  (req, res) => {
     const firstDevice = req.body;
     const pythonScriptPath = 'DeviceFinder.py';
     
-    const pythonCommand = `python ${pythonScriptPath} ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;
+    const pythonCommand = `python ${pythonScriptPath} ${First_Device} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -81,11 +76,11 @@ export const getTopology =  (req, res) => {
 };
 
 export const hostname = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} hostname ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.hostname}`;
+    const pythonCommand = `python ${pythonScriptPath} hostname ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.hostname}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -101,11 +96,11 @@ export const hostname = (req,res) => {
 }
 
 export const int_ip = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} int_ip ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.int_ip} ${firstDevice.mask} ${firstDevice.int}`;
+    const pythonCommand = `python ${pythonScriptPath} int_ip ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.int_ip} ${Device.mask} ${Device.int}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -121,11 +116,11 @@ export const int_ip = (req,res) => {
 }
 
 export const int_desc = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} change_int_desc ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}  ${firstDevice.int} ${firstDevice.desc}`;
+    const pythonCommand = `python ${pythonScriptPath} change_int_desc ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}  ${Device.int} ${Device.desc}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -141,11 +136,11 @@ export const int_desc = (req,res) => {
 }
 
 export const motd = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} motd ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.motd}`;
+    const pythonCommand = `python ${pythonScriptPath} motd ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.motd}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -161,11 +156,11 @@ export const motd = (req,res) => {
 }
 
 export const intv6_ip = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} intv6_ip ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.ipv6} ${firstDevice.mask} ${firstDevice.int}`;
+    const pythonCommand = `python ${pythonScriptPath} intv6_ip ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.ipv6} ${Device.mask} ${Device.int}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -181,11 +176,11 @@ export const intv6_ip = (req,res) => {
 }
 
 export const v6_unicast = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} unicast ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;
+    const pythonCommand = `python ${pythonScriptPath} unicast ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -201,11 +196,11 @@ export const v6_unicast = (req,res) => {
 }
 
 export const ip_route = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} rute ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.ip_route} ${firstDevice.mask} ${firstDevice.nextJump} ${firstDevice.da}`;
+    const pythonCommand = `python ${pythonScriptPath} rute ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.ip_route} ${Device.mask} ${Device.nextJump} ${Device.da}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -221,11 +216,11 @@ export const ip_route = (req,res) => {
 }
 
 export const ipv6_route = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} rutev6 ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.ipv6_route} ${firstDevice.mask} ${firstDevice.nextJump} ${firstDevice.da}`;
+    const pythonCommand = `python ${pythonScriptPath} rutev6 ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.ipv6_route} ${Device.mask} ${Device.nextJump} ${Device.da}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -241,11 +236,11 @@ export const ipv6_route = (req,res) => {
 }
 
 export const newUser = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} user  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.newUser} ${firstDevice.priv} ${firstDevice.secrePass}`;
+    const pythonCommand = `python ${pythonScriptPath} user  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.newUser} ${Device.priv} ${Device.secrePass}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -261,11 +256,11 @@ export const newUser = (req,res) => {
 }
 
 export const logginSyn = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} logginsyn  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;
+    const pythonCommand = `python ${pythonScriptPath} logginsyn  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -281,11 +276,11 @@ export const logginSyn = (req,res) => {
 }
 
 export const syslog = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} syslog  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.serverIP}`;
+    const pythonCommand = `python ${pythonScriptPath} syslog  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.serverIP}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -301,11 +296,11 @@ export const syslog = (req,res) => {
 }
 
 export const DHCPv4 = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} dhcp4  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.dhcpPool} ${firstDevice.interfaceIP} ${firstDevice.mask} ${firstDevice.dnsServer} ${firstDevice.domainName}`;
+    const pythonCommand = `python ${pythonScriptPath} dhcp4  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.dhcpPool} ${Device.interfaceIP} ${Device.mask} ${Device.dnsServer} ${Device.domainName}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -321,11 +316,11 @@ export const DHCPv4 = (req,res) => {
 }
 
 export const sshAuth = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} sshAu  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.retries}`;
+    const pythonCommand = `python ${pythonScriptPath} sshAu  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.retries}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -341,11 +336,11 @@ export const sshAuth = (req,res) => {
 }
 
 export const sshTime = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} sshTime  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret} ${firstDevice.timeOut}`;
+    const pythonCommand = `python ${pythonScriptPath} sshTime  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.timeOut}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -361,11 +356,11 @@ export const sshTime = (req,res) => {
 }
 
 export const saveRunn = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} saveRunn  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;
+    const pythonCommand = `python ${pythonScriptPath} saveRunn  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
 
     const command = cdCommand + pythonCommand ;
 
@@ -381,11 +376,11 @@ export const saveRunn = (req,res) => {
 }
 
 export const encryption = (req,res) => {
-    const firstDevice = req.body;
+    const Device = req.body;
 
     const pythonScriptPath = 'conf.py';
     
-    const pythonCommand = `python ${pythonScriptPath} encryption  ${firstDevice.ip} ${firstDevice.user} ${firstDevice.password} ${firstDevice.secret}`;
+    const pythonCommand = `python ${pythonScriptPath} encryption  ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
 
     const command = cdCommand + pythonCommand ;
 

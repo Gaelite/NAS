@@ -6,7 +6,7 @@ import { exec } from 'child_process';
 const router = express.Router(); 
 
 // all routes in here are starting with /conf
-router.get('/prueba', (req,res) =>{res.send("hpola")});
+router.get('/prueba', test4);
 
 router.post('/VerifySSH', verifySSH);
 //1
