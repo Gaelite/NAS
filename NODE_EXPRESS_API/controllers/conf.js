@@ -1,6 +1,13 @@
 import { NodeSSH } from 'node-ssh';
 import { exec } from 'child_process';
+import readline from 'readline';
 const cdCommand = `cd ./pyscript && `;
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+
 
 export const test4 = (req, res) => {
     const firstDevice = req.body;
@@ -19,26 +26,35 @@ export const test4 = (req, res) => {
         res.send(stdout);
     });
 };
-export const verifySSH = async (req, res) => {
+
+export const verifySSH = async (ip, username, password, syslogIP) => {
     const ssh = new NodeSSH();
+    let ipBlocks;
+    if (typeof ip === 'string' && ip.trim() !== '') {
+        ipBlocks = ip.split('.');
+        if (ipBlocks.length !== 4 || ipBlocks.some(block => isNaN(parseInt(block, 10)) || parseInt(block, 10) < 0 || parseInt(block, 10) > 255)) {
+            return { status: 'error', message: 'Formato de dirección IP incorrecto' };
+        }
+    } else {
+        return { status: 'error', message: 'Formato de dirección IP incorrecto' };
+    }
 
     try {
-        const ip =  prompt('Ingrese la dirección IP: ');
-        const user =  prompt('Ingrese el nombre de usuario: ');
-        const password =  prompt('Ingrese la contraseña: ', { method: 'hide' });
-
-        // Conexión SSH
+        // SSH Connection
         await ssh.connect({
             host: ip,
-            username: user,
+            username: username,
             password: password
         });
 
         console.log('Conexión SSH exitosa');
-        return 'success';
+        console.log('Servidor syslog IP:', syslogIP);
+
+        return { status: 'success', ipBlocks: ipBlocks };
+
     } catch (error) {
         console.error('Error al conectarse a SSH:', error);
-        return 'error';
+        return { status: 'error', message: 'Error al conectarse a SSH' };
     } finally {
         ssh.dispose(); 
     }
