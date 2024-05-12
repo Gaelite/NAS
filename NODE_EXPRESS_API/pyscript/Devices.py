@@ -1,6 +1,7 @@
 class Device:
     def __init__(self,ip):
         self.deviceType = ""
+        self.hostname = ""
         self.ip = ip
         self.interfaces = []
         self.connections = []
@@ -12,7 +13,8 @@ class Device:
     def set_internet(self):
         self.internet = True
 
-    def set_interfaces(self,intv4,intv6):
+    def set_interfaces(self,intv4,intv6,hostname):
+        self.hostname = hostname
         index = 3
         counter = 0
         for x,y in zip(intv4,intv6):
@@ -26,7 +28,7 @@ class Device:
         else:
             self.deviceType = "Router"
 
-    def set_connections(self,To_interface,From_IP,typeD,From_interface,IP_Connected):
+    def set_connections(self,MyHost,To_interface,From_IP,typeD,From_interface,IP_Connected):
         for x in self.connections:
             if x["To_IP"] == IP_Connected:
                 return False
@@ -35,7 +37,7 @@ class Device:
         else:
             typeD = "Router"
         self.connections += [
-            {"Connected_from_Interface":From_interface,"From_IP":From_IP,"Device": typeD,"Connected_to_Interface":To_interface,"To_IP":IP_Connected}
+            {"MyHost":MyHost,"Connected_from_Interface":From_interface,"From_IP":From_IP,"Device": typeD,"Connected_to_Interface":To_interface,"To_IP":IP_Connected}
             ]
         
     def to_dict(self):
@@ -60,6 +62,7 @@ class Device:
 
     def __str__(self):
         device_str = f"Device Type: {self.deviceType}\n"
+        device_str += f"Hostname: {self.hostname}\n"
         device_str += f"IP Address: {self.ip}\n"
         device_str += f"System version: {self.SysVersion}\n"
         device_str += f"Model: {self.modelo}\n"
