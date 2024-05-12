@@ -2,7 +2,7 @@ import sqlite3
 
 # Function to create the database schema
 def create_database_schema():
-    conn = sqlite3.connect('network_data1.db')
+    conn = sqlite3.connect('network_data.db')
     c = conn.cursor()
 
     # Create tables for devices, interfaces, and connections
@@ -62,7 +62,10 @@ def insert_data(json_data):
         
     conn.commit()
     conn.close()
-    print("Database update complete.")
+
+create_database_schema()
+
+ 
 
 
 
