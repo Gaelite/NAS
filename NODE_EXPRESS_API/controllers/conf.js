@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
 import { readFileSync } from 'fs';
+
 const cdCommand = `cd ./pyscript && `;
 
 let First_Device = "";

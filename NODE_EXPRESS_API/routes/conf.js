@@ -1,7 +1,6 @@
 import express from 'express';
 
 import { test4,getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH}from '../controllers/conf.js';
-import { exec } from 'child_process';
 
 const router = express.Router(); 
 
