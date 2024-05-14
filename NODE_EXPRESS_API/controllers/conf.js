@@ -3,12 +3,21 @@ import { readFileSync } from 'fs';
 
 const cdCommand = `cd ./pyscript && `;
 
+<<<<<<< HEAD
+=======
+let user = ""
+let password = ""
+let secret = ""
+>>>>>>> 2e1d1ac1ddfdd50ea9223cd7e9e45f5e4fb68f60
 let First_Device = "192..168.1.1";
 let ValidatedUser = "gmedina";
 let ValidatedPassword = "cisco";
 let ValidatedSecret = "cisco";
 let SyslogServer = "";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2e1d1ac1ddfdd50ea9223cd7e9e45f5e4fb68f60
 
 export const test4 = (req, res) => {
         res.send(ValidatedPassword,ValidatedUser,ValidatedSecret,SyslogServer);
