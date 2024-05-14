@@ -13,6 +13,24 @@ export const test4 = (req, res) => {
         res.send(ValidatedPassword,ValidatedUser,ValidatedSecret,SyslogServer);
 };
 
+export const solicitarInterfaces= (req,res) => {
+    const Device = req.body;
+
+    const pythonScriptPath = 'MemoryFiles.py';
+    
+    const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
+
+    const command = cdCommand + pythonCommand ;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.send(stdout); 
+    });
+}
 
 export const solicitarMemoria = (req,res) => {
     const Device = req.body;
