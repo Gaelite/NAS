@@ -2,8 +2,9 @@ import { exec } from 'child_process';
 import { readFileSync } from 'fs';
 const cdCommand = `cd ./pyscript && `;
 
-
-
+let user = ""
+let password = ""
+let secret = ""
 
 export const test4 = (req, res) => {
     const firstDevice = req.body;
