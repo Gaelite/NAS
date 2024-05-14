@@ -19,7 +19,7 @@ def ssh_login(host, username, password, syslog_ip, secret):
         #print(host)
         #print(syslog_ip)
 
-        result = {'status': 'success', 'message': 'SSH connection successful to ' + host, 'syslog_ip': syslog_ip}
+        result = {'status': 'success', 'message': 'SSH connection successful to ' + host}
         print(json.dumps(result))
 
     except Exception as e:
