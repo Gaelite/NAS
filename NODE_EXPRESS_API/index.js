@@ -36,6 +36,12 @@ app.get('/api/python', (req, res) => {
             console.error(`Error al ejecutar el script de Python: ${error}`);
             res.status(500).send('Error interno del servidor');
             return;
+        }else if (stderr) {
+            console.error(`Error al ejecutar el script de Python: ${stderr}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }else if (stdout) {
+            console.log(`Resultado del script de Python: ${stdout}`);
         }
         res.json(JSON.parse(stdout));
         
@@ -43,3 +49,21 @@ app.get('/api/python', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server Running on port: http://localhost:${PORT}`));
+
+app.get('/routes/conf', (req, res) => {
+
+    const dataToSend = {
+        user: user,
+        password: password,
+        secret: secret,
+        First_Device: First_Device,
+        ValidatedUser: ValidatedUser,
+        ValidatedPassword: ValidatedPassword,
+        ValidatedSecret: ValidatedSecret,
+        SyslogServer: SyslogServer
+    };
+
+    res.send(dataToSend);
+});
+
+app.listen(3000, () => console.log('Server is running on port 3000'));

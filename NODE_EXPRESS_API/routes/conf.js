@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { solicitarMemoria,solicitarCPU,test4,getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH}from '../controllers/conf.js';
+import { solicitarMemoria,solicitarCPU,test4,getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH, getData}from '../controllers/conf.js';
 
 const router = express.Router(); 
 
@@ -10,6 +10,8 @@ router.post('/CPU', solicitarCPU);
 
 // all routes in here are starting with /conf
 router.get('/prueba', test4);
+
+router.get('/GetData', getData);
 
 router.post('/VerifySSH', verifySSH);
 //1

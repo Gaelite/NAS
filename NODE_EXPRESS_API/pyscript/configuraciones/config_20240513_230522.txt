@@ -1,0 +1,130 @@
+dispositivo default gateway topologia prueba ramon
+Building configuration...
+
+Current configuration : 1977 bytes
+!
+! Last configuration change at 00:25:49 UTC Tue May 14 2024 by gmedina
+version 15.1
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname ruterfour4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+memory-size iomem 10
+!
+ipv6 unicast-routing
+ipv6 cef
+ip source-route
+ip cef
+!
+!
+!
+!
+!
+no ip domain lookup
+ip domain name ramon.mx
+!
+multilink bundle-name authenticated
+!
+!
+crypto pki token default removal timeout 0
+!
+!
+license udi pid CISCO2901/K9 sn FTX15448427
+license boot module c2900 technology-package securityk9
+license boot module c2900 technology-package datak9
+!
+!
+username gmedina privilege 15 secret 5 $1$lMIr$OZXZmP5nNKfIDNetUSFJF.
+!
+redundancy
+!
+!
+!
+!
+ip ssh time-out 40
+ip ssh authentication-retries 2
+ip ssh version 2
+! 
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ description interfaz prueba ramon
+ ip address 192.168.1.1 255.255.255.0
+ duplex auto
+ speed auto
+ ipv6 address 2000:ACAD:BD::1/64
+!
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 192.168.3.1 255.255.255.0
+!
+interface Serial0/0/1
+ ip address 192.168.2.1 255.255.255.0
+!
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+ip route 0.0.0.0 0.0.0.0 Serial0/0/0
+ip route 192.168.4.0 255.255.255.0 Serial0/0/0
+!
+logging trap warnings
+logging 192.168.1.1
+logging 192.168.1.19
+logging 192.168.1.56
+logging 192.168.1.75
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+banner motd ^Cdispositivo default gateway topologia prueba ramon^C
+!
+line con 0
+ logging synchronous
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output lat pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+scheduler allocate 20000 1000
+ntp server 1.1.1.1
+end
