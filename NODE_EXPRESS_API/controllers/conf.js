@@ -5,6 +5,11 @@ const cdCommand = `cd ./pyscript && `;
 let user = ""
 let password = ""
 let secret = ""
+let First_Device = "192..168.1.1";
+let ValidatedUser = "gmedina";
+let ValidatedPassword = "cisco";
+let ValidatedSecret = "cisco";
+let SyslogServer = "";
 
 export const test4 = (req, res) => {
     const firstDevice = req.body;
