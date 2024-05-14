@@ -1,5 +1,6 @@
 import textfsm
 from netmiko import ConnectHandler
+import ipaddress
 
 def NAT(ip, username, password, enable_secret):
     try:
@@ -27,27 +28,31 @@ def NAT(ip, username, password, enable_secret):
 
 def getSerial(ip,username,password,secret):
     try:
-        version_template = textfsm.TextFSM(open("Templates/cisco_ios_show_version.textfsm"))
-        #Inicia SSH
-        ssh_connection = ConnectHandler(
-                device_type='cisco_ios',
-                ip=ip,
-                username=username,
-                password=password,
-                secret=secret
-            )
-        
-        ssh_connection.enable()#Activa modo EXEC privilegiado
+        ippriv = ipaddress.ip_address(ip)
+        if ippriv.is_private:
+            version_template = textfsm.TextFSM(open("Templates/cisco_ios_show_version.textfsm"))
+            #Inicia SSH
+            ssh_connection = ConnectHandler(
+                    device_type='cisco_ios',
+                    ip=ip,
+                    username=username,
+                    password=password,
+                    secret=secret
+                )
+            
+            ssh_connection.enable()#Activa modo EXEC privilegiado
 
-        version_result = ssh_connection.find_prompt() + "\n"
-        #Informacion de interfaces
-        version_result += ssh_connection.send_command("show version", delay_factor=2)#te consigue la informacion del dispositivo
-        #Desconectar SSH
-        ssh_connection.disconnect()
+            version_result = ssh_connection.find_prompt() + "\n"
+            #Informacion de interfaces
+            version_result += ssh_connection.send_command("show version", delay_factor=2)#te consigue la informacion del dispositivo
+            #Desconectar SSH
+            ssh_connection.disconnect()
 
-        version_result = version_template.ParseText(version_result)
+            version_result = version_template.ParseText(version_result)
 
-        return version_result[0][14][0]
+            return version_result[0][14][0]
+        else:
+            return 'NAT'
     except Exception as error:
         print(error)
 
