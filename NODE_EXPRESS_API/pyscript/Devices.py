@@ -28,7 +28,7 @@ class Device:
         else:
             self.deviceType = "Router"
 
-    def set_connections(self,MyHost,To_interface,From_IP,HostNei,typeD,From_interface,IP_Connected):
+    def set_connections(self,MyHost,To_interface,From_IP,HostNei,typeD,From_interface,IP_Connected,MyKey,NeiKey):
         for x in self.connections:
             if x["To_IP"] == IP_Connected:
                 return False
@@ -37,7 +37,7 @@ class Device:
         else:
             typeD = "Router"
         self.connections += [
-            {"MyHost":MyHost,"Connected_from_Interface":From_interface,"From_IP":From_IP,"HostNei": HostNei,"Device": typeD,"Connected_to_Interface":To_interface,"To_IP":IP_Connected}
+            {"MyHost":MyHost,"Connected_from_Interface":From_interface,"From_IP":From_IP,"HostNei": HostNei,"Device": typeD,"Connected_to_Interface":To_interface,"To_IP":IP_Connected,'MyKey':MyKey,'NeiKey':NeiKey}
             ]
         
     def to_dict(self):
