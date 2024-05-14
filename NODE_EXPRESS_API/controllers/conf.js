@@ -52,6 +52,22 @@ export const solicitarCPU = (req,res) => {
     });
 };
 
+
+export const getData = (req, res) => {
+    const dataToSend = {
+        user: user,
+        password: password,
+        secret: secret,
+        First_Device: First_Device,
+        ValidatedUser: ValidatedUser,
+        ValidatedPassword: ValidatedPassword,
+        ValidatedSecret: ValidatedSecret,
+        SyslogServer: SyslogServer
+    };
+
+    res.send(dataToSend);
+};
+
 export const verifySSH = (req, res) => {
     const { ip, user, password, syslogIP, secret, port } = req.body;
 

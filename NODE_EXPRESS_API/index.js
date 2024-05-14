@@ -50,15 +50,7 @@ app.get('/api/python', (req, res) => {
 
 app.listen(PORT, () => console.log(`Server Running on port: http://localhost:${PORT}`));
 
-app.get('/api/python', (req, res) => {
-    const user = "";
-    const password = "";
-    const secret = "";
-    const First_Device = "192.168.1.1";
-    const ValidatedUser = "gmedina";
-    const ValidatedPassword = "cisco";
-    const ValidatedSecret = "cisco";
-    const SyslogServer = "";
+app.get('/routes/conf', (req, res) => {
 
     const dataToSend = {
         user: user,
