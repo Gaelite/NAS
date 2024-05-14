@@ -106,6 +106,46 @@ export const verifySSH = (req, res) => {
 };
 
 
+export const vlan = (req, res) => {
+    const Device = req.body;
+
+    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/vlan.py';
+
+    const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.vlan_id} ${Device.vlan_name}`;
+
+    const command = cdCommand + pythonCommand ;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.send(stdout);
+
+    });
+}
+
+export const shrun = (req, res) => {
+    const Device = req.body;
+
+    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/runnConfig.py';
+
+    const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
+
+    const command = cdCommand + pythonCommand ;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.send(stdout);
+
+    });}
+
+
 
 
 export const getTopology =  (req, res) => {
@@ -342,7 +382,7 @@ export const syslog = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -362,7 +402,7 @@ export const DHCPv4 = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -382,7 +422,7 @@ export const sshAuth = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -402,7 +442,7 @@ export const sshTime = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -422,7 +462,7 @@ export const saveRunn = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -442,7 +482,7 @@ export const encryption = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
