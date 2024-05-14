@@ -32,15 +32,15 @@ try:
 
     # Calcular el porcentaje de almacenamiento utilizado
     used_percent = ((total_size - free_space) / total_size) * 100
-
-    print(f"Memory information:\n {memoryInfo}\nStorage percentage used: {used_percent:.2f}%")
-
     # Obtener información de la CPU
     cpu_info = ssh_connection.send_command("show processes cpu sorted | exclude 0.00% | head", delay_factor=2)
-    print(f"CPU information:\n{cpu_info}")
 
     # Desconectar la conexión SSH
     ssh_connection.disconnect()
+
+    res = f"Memory information:\n {memoryInfo}\nStorage percentage used: {used_percent:.2f}%"
+    res += f"CPU information:\n{cpu_info}"
+    print(json.dumps(res))
 except Exception as error:
     print(json.dumps("Intenta de nuevo"))
 

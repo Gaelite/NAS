@@ -60,6 +60,18 @@ class Device:
         self.modelo = model
         self.numeroSerie = serial
 
+    def get_interfaces(self):
+        if self.interfaces:
+            device_str = "Interfaces:\n"
+            for interface in self.interfaces:
+                device_str += (
+                    f"- Interface: {interface['Interface']}, "
+                    f"IPv4: {interface['IPv4']}, "
+                    f"IPv6: {interface['IPv6']}, "
+                    f"Local-link: {interface['Link-local']}\n"
+                )
+            return device_str
+
     def __str__(self):
         device_str = f"Device Type: {self.deviceType}\n"
         device_str += f"Hostname: {self.hostname}\n"
