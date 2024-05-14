@@ -1,4 +1,5 @@
 import sys
+import json
 
 from functions import (
     change_hostname,            #1

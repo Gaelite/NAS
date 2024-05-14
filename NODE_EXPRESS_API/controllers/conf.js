@@ -3,10 +3,10 @@ import { readFileSync } from 'fs';
 
 const cdCommand = `cd ./pyscript && `;
 
-let First_Device = "";
-let ValidatedUser = "";
-let ValidatedPassword = "";
-let ValidatedSecret = "";
+let First_Device = "192..168.1.1";
+let ValidatedUser = "gmedina";
+let ValidatedPassword = "cisco";
+let ValidatedSecret = "cisco";
 let SyslogServer = "";
 
 
@@ -15,7 +15,43 @@ export const test4 = (req, res) => {
 };
 
 
+export const solicitarMemoria = (req,res) => {
+    const Device = req.body;
 
+    const pythonScriptPath = 'MemoryFiles.py';
+    
+    const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
+
+    const command = cdCommand + pythonCommand ;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(stdout); 
+    });
+};
+
+export const solicitarCPU = (req,res) => {
+    const Device = req.body;
+
+    const pythonScriptPath = 'CPUusage.py';
+    
+    const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
+
+    const command = cdCommand + pythonCommand ;
+
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Error al ejecutar el script de Python: ${error}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }
+        res.json(stdout); 
+    });
+};
 
 export const verifySSH = (req, res) => {
     const { ip, user, password, syslogIP, secret, port } = req.body;

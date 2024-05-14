@@ -137,4 +137,4 @@ try:
 
         print(res)
 except Exception as error:
-        print("Error:",error)
+        print("Hay un error en la topología")
