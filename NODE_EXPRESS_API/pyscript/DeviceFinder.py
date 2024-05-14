@@ -52,6 +52,7 @@ if __name__ == "__main__":
     SyslogServer = sys.argv[5]
 
     while True:
+        
         #print(ip)
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
             # Lanzamos las tareas
