@@ -1,17 +1,17 @@
 Mensaje
 Building configuration...
 
-Current configuration : 3341 bytes
+Current configuration : 3439 bytes
 !
-! Last configuration change at 11:09:14 UTC Mon Mar 1 1993 by gmedina
+! Last configuration change at 12:58:59 UTC Mon Mar 1 1993 by gmedina
 !
 version 15.0
 no service pad
 service timestamps debug datetime msec
 service timestamps log datetime msec
-no service password-encryption
+service password-encryption
 !
-hostname Switch1
+hostname Hola
 !
 boot-start-marker
 boot-end-marker
@@ -128,6 +128,7 @@ interface GigabitEthernet0/2
 interface Vlan1
  ip address 192.168.1.2 255.255.255.0
 !
+ip default-gateway 192.168.1.1
 ip http server
 ip http secure-server
 logging trap warnings
@@ -135,6 +136,7 @@ logging host 192.168.1.1
 logging host 192.168.1.19
 logging host 192.168.1.56
 logging host 192.168.1.75
+logging host 192.168.1.18
 !
 !
 banner motd ^CMensaje^C
@@ -147,4 +149,6 @@ line vty 5 15
  login local
  transport input ssh
 !
+ntp server 192.168.1.1
+ntp server 192.168.1.85
 end
