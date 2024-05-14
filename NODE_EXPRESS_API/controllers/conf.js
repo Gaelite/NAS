@@ -71,7 +71,7 @@ export const getData = (req, res) => {
 export const verifySSH = (req, res) => {
     const { ip, user, password, syslogIP, secret, port } = req.body;
 
-    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/SSH.py';
+    const pythonScriptPath = 'SSH.py';
 
     const command = `python ${pythonScriptPath} "${ip}" "${user}" "${password}" "${syslogIP}" "${secret || ''}" "${port || '22'}"`;
 
@@ -109,7 +109,7 @@ export const verifySSH = (req, res) => {
 export const vlan = (req, res) => {
     const Device = req.body;
 
-    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/vlan.py';
+    const pythonScriptPath = 'vlan.py';
 
     const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${Device.vlan_id} ${Device.vlan_name}`;
 
