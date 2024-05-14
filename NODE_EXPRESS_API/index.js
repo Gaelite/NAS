@@ -44,7 +44,7 @@ app.get('/api/python', (req, res) => {
 
 app.listen(PORT, () => console.log(`Server Running on port: http://localhost:${PORT}`));
 
-function get() {
+app.get('/api/python', (req, res) => {
     const user = "";
     const password = "";
     const secret = "";
@@ -65,7 +65,7 @@ function get() {
         SyslogServer: SyslogServer
     };
 
-    rest.send(dataToSend);
-}
+    res.send(dataToSend);
+});
 
-get();
+app.listen(3000, () => console.log('Server is running on port 3000'));
