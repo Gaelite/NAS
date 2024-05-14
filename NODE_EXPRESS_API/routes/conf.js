@@ -15,7 +15,7 @@ router.get('/GetData', getData);
 
 router.post('/VerifySSH', verifySSH);
 //1
-router.post('/Topology', getTopology);
+router.get('/Topology', getTopology);
 //2
 router.post('/ChangeHostname',hostname);
 //3

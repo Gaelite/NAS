@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 nat = NAT(ip,username,password,secret)
                 if len(nat) > 0:
                     all_devices[deviceNum].NAT = True
-                    all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname, 'Internet', '0.0.0.0','Internet','Internet',nat[0][1],'Internet','Internet','Internet')
+                    all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname, 'Internet', '0.0.0.0','Internet','Internet',nat[0][1],'Internet',all_devices[deviceNum].modelo,'Internet')
 
             for x in all_devices[deviceNum].interfaces:
                 if x["IPv4"] != 'unassigned':

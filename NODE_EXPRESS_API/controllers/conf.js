@@ -112,7 +112,7 @@ export const getTopology =  (req, res) => {
     const firstDevice = req.body;
     const pythonScriptPath = 'DeviceFinder.py';
     
-    const pythonCommand = `python ${pythonScriptPath} ${First_Device} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
+    const pythonCommand = `python ${pythonScriptPath} ${First_Device} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret} ${SyslogServer}`;
 
     const command = cdCommand + pythonCommand ;
 
