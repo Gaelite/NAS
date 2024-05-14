@@ -1,39 +1,42 @@
 import paramiko
+import schedule
+import time
+import os
 
-def obtener_configuracion_ssh(host, usuario, contraseña, comando):
-    # Crear una instancia de cliente SSH
+def obtener_configuracion_ssh(host, usuario, contraseña, secret, comando):
     cliente_ssh = paramiko.SSHClient()
-
-    # Ajustar la política de hostkey para aceptar automáticamente las claves SSH desconocidas
     cliente_ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     try:
-        # Conectar al host SSH
-        cliente_ssh.connect(hostname=host, username=usuario, password=contraseña)
-
-        # Ejecutar el comando show running-config
+        cliente_ssh.connect(hostname=host, username=usuario, password=contraseña, pkey=secret)
         _, stdout, _ = cliente_ssh.exec_command(comando)
-
-        # Leer la salida del comando
         salida = stdout.read().decode()
-
         return salida
-
     finally:
-        # Cerrar la conexión SSH
         cliente_ssh.close()
 
-# Datos de conexión SSH
-host = 'tu_direccion_ip_del_router'
-usuario = 'tu_usuario'
-contraseña = 'tu_contraseña'
-comando = 'show running-config'
+def guardar_configuracion(host, usuario, contraseña, secret, comando):
+    configuracion = obtener_configuracion_ssh(host, usuario, contraseña, secret, comando)
 
-# Llamar a la función para obtener la configuración
-configuracion = obtener_configuracion_ssh(host, usuario, contraseña, comando)
+    # Crear la carpeta si no existe
+    carpeta_destino = 'configuraciones'
+    if not os.path.exists(carpeta_destino):
+        os.makedirs(carpeta_destino)
 
-# Guardar la configuración en un archivo de texto
-with open('configuracion_router.txt', 'w') as archivo:
-    archivo.write(configuracion)
+    # Generar el nombre del archivo con la fecha y hora actual
+    nombre_archivo = time.strftime("config_%Y%m%d_%H%M%S.txt")
 
-print("Configuración guardada exitosamente en 'configuracion_router.txt'")
+    # Guardar la configuración en el archivo dentro de la carpeta
+    ruta_archivo = os.path.join(carpeta_destino, nombre_archivo)
+    with open(ruta_archivo, 'w') as archivo:
+        archivo.write(configuracion)
+
+    print(f"Configuración guardada exitosamente en '{ruta_archivo}'")
+
+# Programar la tarea para ejecutarse cada 3 minutos
+schedule.every(3).minutes.do(guardar_configuracion, host='192.168.1.1', usuario='gmedina', contraseña='cisco', secret='ruta_al_archivo_rsa', comando='show running-config')
+
+# Bucle para ejecutar las tareas programadas
+while True:
+    schedule.run_pending()
+    time.sleep(1)
