@@ -1,7 +1,7 @@
 from pysnmp.hlapi import *
 
 
-ip_address = '192.168.24.1'  # Dirección IP del dispositivo
+ip_address = '192.168.1.1'  # Dirección IP del dispositivo
 snmp_port = 161  #Puerto default
 community_string = 'cisco'  #Contraseña se tiene que configurar en el router
 oid = '1.3.6.1.4.1.9.9.109.1.1.1.1.8'  #Identificador del uso de cpu 
