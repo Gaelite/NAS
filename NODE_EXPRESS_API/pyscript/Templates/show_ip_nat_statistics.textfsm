@@ -1,0 +1,10 @@
+Value INTERFACE_TYPE (\S+)
+Value INTERFACE (\S+)
+
+Start
+  ^Outside interfaces: -> OutsideInterfaces
+
+OutsideInterfaces
+  ^\s+${INTERFACE} -> Record
+  ^\s+${INTERFACE}, -> Continue.Record
+
