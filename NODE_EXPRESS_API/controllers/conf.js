@@ -142,7 +142,7 @@ export const hostname = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send("Hola");
         
     });
 }
@@ -162,7 +162,7 @@ export const int_ip = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -173,7 +173,7 @@ export const int_desc = (req,res) => {
     const pythonScriptPath = 'conf.py';
     
     const pythonCommand = `python ${pythonScriptPath} change_int_desc ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}  ${Device.int} ${Device.desc}`;
-
+    console.log (Device.desc)
     const command = cdCommand + pythonCommand ;
 
     exec(command, (error, stdout, stderr) => {
@@ -182,7 +182,7 @@ export const int_desc = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -202,7 +202,7 @@ export const motd = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -222,7 +222,7 @@ export const intv6_ip = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -242,7 +242,7 @@ export const v6_unicast = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -262,7 +262,7 @@ export const ip_route = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -282,7 +282,7 @@ export const ipv6_route = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -302,7 +302,7 @@ export const newUser = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }
@@ -322,7 +322,7 @@ export const logginSyn = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(JSON.parse(stdout));
+        res.send(stdout);
         
     });
 }

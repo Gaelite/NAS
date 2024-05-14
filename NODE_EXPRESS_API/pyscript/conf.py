@@ -38,6 +38,8 @@ elif opc == 'int_ip':
 elif opc == 'change_int_desc':
     interface = sys.argv[6]
     desc = sys.argv[7]
+    print(interface)
+    print(desc)
     change_int_desc(device_ip, username, password,secret,interface,desc)
 elif opc == 'motd':
     motd = sys.argv[6]
