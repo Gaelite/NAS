@@ -29,7 +29,7 @@ export const solicitarMemoria = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(stdout); 
+        res.send(stdout); 
     });
 };
 
@@ -48,7 +48,7 @@ export const solicitarCPU = (req,res) => {
             res.status(500).send('Error interno del servidor');
             return;
         }
-        res.json(stdout); 
+        res.send(stdout); 
     });
 };
 
