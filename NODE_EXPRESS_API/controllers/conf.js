@@ -147,7 +147,7 @@ export const vlan = (req, res) => {
 export const shrun = (req, res) => {
     const Device = req.body;
 
-    const pythonScriptPath = '/Users/valen/OneDrive/Documents/REDESS/NAS/NODE_EXPRESS_API/pyscript/runnConfig.py';
+    const pythonScriptPath = 'runnConfig.py';
 
     const pythonCommand = `python ${pythonScriptPath} ${Device.ip} ${ValidatedUser} ${ValidatedPassword} ${ValidatedSecret}`;
 
