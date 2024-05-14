@@ -8,7 +8,7 @@ class Device:
         self.SysVersion = None
         self.modelo = None
         self.numeroSerie = None
-        self.internet = False
+        self.NAT = False
 
     def set_internet(self):
         self.internet = True

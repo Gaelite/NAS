@@ -1,6 +1,31 @@
 import textfsm
 from netmiko import ConnectHandler
 
+def NAT(ip, username, password, enable_secret):
+    try:
+        NAT_Template = textfsm.TextFSM(open("Templates/show_ip_nat_statistics.textfsm"))
+        #Inicia SSH
+        ssh_connection = ConnectHandler(
+            device_type='cisco_ios',
+            ip=ip,
+            username=username,
+            password=password,
+            secret=enable_secret
+        )
+    except Exception as error:
+        return error
+
+    ssh_connection.enable()#Activa modo EXEC privilegiado
+
+    NAT_res = ssh_connection.find_prompt() + "\n"#Te da el modo actual de CLI junto con el nombre del host
+
+    NAT_res += ssh_connection.send_command("show ip nat statistics", delay_factor=2)
+
+    res = NAT_Template.ParseText(NAT_res)
+
+    return res
+
+
 def get_device_neighbor_details(ip, username, password, enable_secret,SyslogServer):
     try:
         cdp_template = textfsm.TextFSM(open("Templates/show_cdp_neighbor_detail.textfsm"))
