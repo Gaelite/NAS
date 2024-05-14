@@ -1,0 +1,150 @@
+Mensaje
+Building configuration...
+
+Current configuration : 3341 bytes
+!
+! Last configuration change at 10:40:14 UTC Mon Mar 1 1993 by gmedina
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Switch1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username gmedina privilege 15 secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+no aaa new-model
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+ip domain-name uag.mx
+!
+mls qos
+!
+crypto pki trustpoint TP-self-signed-3891195264
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3891195264
+ revocation-check none
+ rsakeypair TP-self-signed-3891195264
+!
+!
+crypto pki certificate chain TP-self-signed-3891195264
+ certificate self-signed 01
+  3082022B 30820194 A0030201 02020101 300D0609 2A864886 F70D0101 05050030 
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274 
+  69666963 6174652D 33383931 31393532 3634301E 170D3933 30333031 30303030 
+  35355A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649 
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 38393131 
+  39353236 3430819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281 
+  8100BAA8 78696A2F 1820C49D C92D1E33 3BC819BA FBDFA371 2AE761ED 4B3319BF 
+  311E271A 1753E49E E8C4C021 801023C2 DB7EB6AA 850EA566 1068F91E D9383FF8 
+  F4EDAD2B 82C4E758 9AF65619 07460C20 A2F560D5 308C28B5 6F4F6288 643D35D0 
+  14C5712B C31C6A26 9A1ECF0F 86F8DDAA 0200DB34 4EDF0F96 273D9D2F ECD55639 
+  06F50203 010001A3 53305130 0F060355 1D130101 FF040530 030101FF 301F0603 
+  551D2304 18301680 14066B7F E67F5D9A 680548A6 973685A3 C132CB26 77301D06 
+  03551D0E 04160414 066B7FE6 7F5D9A68 0548A697 3685A3C1 32CB2677 300D0609 
+  2A864886 F70D0101 05050003 8181007D C0CBB7CE 8A5D9A4B 29424CC7 CD6EB689 
+  94DAF920 8832779A AC7BD6E0 D8641822 E539395C 9DCF71EC 793F25ED 9AD11AB1 
+  1530BA9F A5728795 2C15EA23 B9B6BFD3 B0B4ABCD 5C809252 44D8309A EAB55C57 
+  F7BEB0AB C3062F18 2241B4E8 FC1C9C25 3DCD042C 5FFC893A 6AC4B596 D85BE6E3 
+  126F1E64 CAFEF5F9 2B5239F3 9EE366
+  	quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+ip ssh time-out 40
+ip ssh authentication-retries 2
+ip ssh version 2
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ ip address 192.168.1.2 255.255.255.0
+!
+ip http server
+ip http secure-server
+logging trap warnings
+logging host 192.168.1.1
+logging host 192.168.1.19
+logging host 192.168.1.56
+logging host 192.168.1.75
+!
+!
+banner motd ^CMensaje^C
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+end
