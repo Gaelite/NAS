@@ -2,7 +2,7 @@ from Devices import Device
 import time
 import sys
 import concurrent.futures
-from functions import get_device_neighbor_details, get_device_info,NAT
+from functions import get_device_neighbor_details, get_device_info,NAT,getSerial
 import json
 import sqlite3
 
@@ -69,6 +69,7 @@ if __name__ == "__main__":
             #creo un objeto tipo device
             all_devices.append(Device(ip))      
             all_devices[deviceNum].set_interfaces(current_device[0],current_device[1],current_device[2][0][4])
+            all_devices[deviceNum].setInfo(current_device[2][0][0],current_device[2][0][14][0],current_device[2][0][1])
 
             for x in range(len(neighbor_device)):
                 all_devices[deviceNum].interfaces
@@ -77,20 +78,19 @@ if __name__ == "__main__":
                 for z in all_devices[deviceNum].interfaces:
                     if z["Interface"] == neighbor_device[x][5] or z["Interface"] == "Vlan1":
                         local_Ip = z["IPv4"]
-                        all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname,neighbor_device[x][4],local_Ip,hostnamesNei[hostNum], type[x][2], neighbor_device[x][5], neighbor_device[x][2])
+                        all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname,neighbor_device[x][4],local_Ip,hostnamesNei[hostNum], type[x][2], neighbor_device[x][5], neighbor_device[x][2],all_devices[deviceNum].modelo,getSerial(neighbor_device[x][2],username,password,secret))
                         if len(hostnamesNei)-1 > hostNum:
                             hostNum += 1
 
             hostnamesNei = []
             hostNum = 0
 
-            all_devices[deviceNum].setInfo(current_device[2][0][14][0],current_device[2][0][0],current_device[2][0][1])
 
             if all_devices[deviceNum].deviceType == 'Router':
                 nat = NAT(ip,username,password,secret)
                 if len(nat) > 0:
                     all_devices[deviceNum].NAT = True
-                    all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname, 'Internet', '0.0.0.0','Internet','Internet',nat[0][1],'Internet')
+                    all_devices[deviceNum].set_connections(all_devices[deviceNum].hostname, 'Internet', '0.0.0.0','Internet','Internet',nat[0][1],'Internet','Internet','Internet')
 
             for x in all_devices[deviceNum].interfaces:
                 if x["IPv4"] != 'unassigned':
@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     for device in all_devices:
         interfaces = [{'Interface': i['Interface'], 'IPv4': i['IPv4'], 'IPv6': i['IPv6'], 'Link-local': i['Link-local']} for i in device.interfaces]
-        connections = [{"MyHost":device.hostname,'Connected_from_Interface': c['Connected_from_Interface'], 'From_IP': c['From_IP'],'HostNei': c['HostNei'], 'Device': c['Device'], 'Connected_to_Interface': c['Connected_to_Interface'], 'To_IP': c['To_IP']} for c in device.connections]
+        connections = [{"MyHost":device.hostname,'Connected_from_Interface': c['Connected_from_Interface'], 'From_IP': c['From_IP'],'HostNei': c['HostNei'], 'Device': c['Device'], 'Connected_to_Interface': c['Connected_to_Interface'], 'To_IP': c['To_IP'], 'MyKey': c['MyKey'], 'NeiKey':c['NeiKey']} for c in device.connections]
         json_Pack.append({
             'hostname': device.hostname,
             'deviceType': device.deviceType,
@@ -136,8 +136,8 @@ if __name__ == "__main__":
             'connections': connections
         })
         ind += 1
-        #print(device)
+        print(device)
     res = json.dumps(json_Pack)
-    insert_data_to_database(json_Pack)
+    #insert_data_to_database(json_Pack)
 
     #print(res)

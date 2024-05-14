@@ -25,6 +25,31 @@ def NAT(ip, username, password, enable_secret):
 
     return res
 
+def getSerial(ip,username,password,secret):
+    try:
+        version_template = textfsm.TextFSM(open("Templates/cisco_ios_show_version.textfsm"))
+        #Inicia SSH
+        ssh_connection = ConnectHandler(
+                device_type='cisco_ios',
+                ip=ip,
+                username=username,
+                password=password,
+                secret=secret
+            )
+        
+        ssh_connection.enable()#Activa modo EXEC privilegiado
+
+        version_result = ssh_connection.find_prompt() + "\n"
+        #Informacion de interfaces
+        version_result += ssh_connection.send_command("show version", delay_factor=2)#te consigue la informacion del dispositivo
+        #Desconectar SSH
+        ssh_connection.disconnect()
+
+        version_result = version_template.ParseText(version_result)
+
+        return version_result[0][14][0]
+    except Exception as error:
+        print(error)
 
 def get_device_neighbor_details(ip, username, password, enable_secret,SyslogServer):
     try:

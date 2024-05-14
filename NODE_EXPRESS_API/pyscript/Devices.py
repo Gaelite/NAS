@@ -28,7 +28,7 @@ class Device:
         else:
             self.deviceType = "Router"
 
-    def set_connections(self,MyHost,To_interface,From_IP,HostNei,typeD,From_interface,IP_Connected):
+    def set_connections(self,MyHost,To_interface,From_IP,HostNei,typeD,From_interface,IP_Connected,MyKey,NeiKey):
         for x in self.connections:
             if x["To_IP"] == IP_Connected:
                 return False
@@ -37,7 +37,7 @@ class Device:
         else:
             typeD = "Router"
         self.connections += [
-            {"MyHost":MyHost,"Connected_from_Interface":From_interface,"From_IP":From_IP,"HostNei": HostNei,"Device": typeD,"Connected_to_Interface":To_interface,"To_IP":IP_Connected}
+            {"MyHost":MyHost,"Connected_from_Interface":From_interface,"From_IP":From_IP,"HostNei": HostNei,"Device": typeD,"Connected_to_Interface":To_interface,"To_IP":IP_Connected,'MyKey':MyKey,'NeiKey':NeiKey}
             ]
         
     def to_dict(self):
@@ -81,7 +81,7 @@ class Device:
         if self.connections:
             device_str += "Connections:\n"
             for conn in self.connections:
-                device_str += f"-From host: {conn['MyHost']} From Interface: {conn['Connected_from_Interface']}, From IP: {conn['From_IP']},To host: {conn['HostNei']} ,Device: {conn['Device']} , To Interface: {conn['Connected_to_Interface']}, To IP: {conn['To_IP']}\n"
+                device_str += f"-From host: {conn['MyHost']} From Interface: {conn['Connected_from_Interface']}, From IP: {conn['From_IP']},To host: {conn['HostNei']} ,Device: {conn['Device']} , To Interface: {conn['Connected_to_Interface']}, To IP: {conn['To_IP']}, 'MyKey': {conn['MyKey']}, 'NeiKey': {conn['NeiKey']}\n"
         else:
             device_str += "No connections."
 
