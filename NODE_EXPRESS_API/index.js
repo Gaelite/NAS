@@ -36,6 +36,12 @@ app.get('/api/python', (req, res) => {
             console.error(`Error al ejecutar el script de Python: ${error}`);
             res.status(500).send('Error interno del servidor');
             return;
+        }else if (stderr) {
+            console.error(`Error al ejecutar el script de Python: ${stderr}`);
+            res.status(500).send('Error interno del servidor');
+            return;
+        }else if (stdout) {
+            console.log(`Resultado del script de Python: ${stdout}`);
         }
         res.json(JSON.parse(stdout));
         
