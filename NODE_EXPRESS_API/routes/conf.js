@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { solicitarMemoria,solicitarCPU,test4,getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH, getData, vlan, shrun}from '../controllers/conf.js';
+import { solicitarInterfaces,solicitarCPU,test4,getTopology, hostname, int_ip, int_desc, motd,intv6_ip,v6_unicast,ip_route,ipv6_route,newUser,logginSyn,syslog,DHCPv4, sshAuth,sshTime,saveRunn,encryption, verifySSH, getData, vlan, shrun}from '../controllers/conf.js';
 
 const router = express.Router(); 
 
 // Rutas para conseguir datos importantes
-router.post('/Memoria', solicitarMemoria);
+router.post('/ShowIntShow', solicitarInterfaces);
 router.post('/CPU', solicitarCPU);
 
 // all routes in here are starting with /conf
