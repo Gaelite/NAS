@@ -1,15 +1,15 @@
 klsalbhasfjwaefC1w
 Building configuration...
 
-Current configuration : 2171 bytes
+Current configuration : 2414 bytes
 !
-! Last configuration change at 03:44:19 UTC Tue May 14 2024 by gmedina
+! Last configuration change at 06:54:08 UTC Tue May 14 2024 by gmedina
 version 15.1
 service timestamps debug datetime msec
 service timestamps log datetime msec
 no service password-encryption
 !
-hostname Arantzateamo
+hostname HOLA
 !
 boot-start-marker
 boot-end-marker
@@ -27,6 +27,10 @@ ip cef
 !
 !
 !
+ip dhcp excluded-address 192.168.1.1
+ip dhcp excluded-address 192.168.1.2 192.168.1.5
+!
+ip dhcp pool PoolGael
 !
 !
 no ip domain lookup
@@ -88,6 +92,7 @@ interface Serial0/0/1
  ip address 192.168.2.1 255.255.255.0
 !
 !
+ip default-gateway 192.168.1.1
 ip forward-protocol nd
 !
 no ip http server
@@ -95,6 +100,7 @@ no ip http secure-server
 !
 ip route 0.0.0.0 0.0.0.0 Serial0/0/0
 ip route 0.0.0.0 0.0.0.0 192.168.1.4 27
+ip route 192.168.1.0 255.255.255.0 192.168.1.2
 ip route 192.168.4.0 255.255.255.0 Serial0/0/0
 !
 logging trap warnings
@@ -102,6 +108,9 @@ logging 192.168.1.1
 logging 192.168.1.19
 logging 192.168.1.56
 logging 192.168.1.75
+logging 192.168.1.18
+logging 192.168.1.91
+logging 192.168.1.11
 !
 !
 !

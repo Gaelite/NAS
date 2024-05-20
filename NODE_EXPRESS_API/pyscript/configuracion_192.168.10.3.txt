@@ -1,0 +1,457 @@
+
+Building configuration...
+
+Current configuration : 5691 bytes
+!
+! Last configuration change at 01:53:55 UTC Mon Mar 1 1993 by gmedina
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname S8
+!
+boot-start-marker
+boot-end-marker
+!
+!
+username gmedina privilege 15 secret 5 $1$OFN4$BitD.yCR.0K2P4so.Z5.B.
+no aaa new-model
+system mtu routing 1500
+vtp domain alumnos
+vtp mode transparent
+!
+!
+ip domain-name uag.mx
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+vlan 2
+ name Python_VLAN_2
+!
+vlan 3
+ name Python_VLAN_3
+!
+vlan 4
+ name Python_VLAN_4
+!
+vlan 5
+ name Python_VLAN_5
+!
+vlan 6
+ name Python_VLAN_6
+!
+vlan 7
+ name Python_VLAN_7
+!
+vlan 8
+ name Python_VLAN_8
+!
+vlan 9
+ name Python_VLAN_9
+!
+vlan 10
+ name Python_VLAN_10
+!
+vlan 11
+ name Python_VLAN_11
+!
+vlan 12
+ name Python_VLAN_12
+!
+vlan 13
+ name Python_VLAN_13
+!
+vlan 14
+ name Python_VLAN_14
+!
+vlan 15
+ name Python_VLAN_15
+!
+vlan 16
+ name Python_VLAN_16
+!
+vlan 17
+ name Python_VLAN_17
+!
+vlan 18
+ name Python_VLAN_18
+!
+vlan 19
+ name Python_VLAN_19
+!
+vlan 20
+ name Python_VLAN_20
+!
+vlan 21
+ name Python_VLAN_21
+!
+vlan 22
+ name Python_VLAN_22
+!
+vlan 23
+ name Python_VLAN_23
+!
+vlan 24
+ name Python_VLAN_24
+!
+vlan 25
+ name Python_VLAN_25
+!
+vlan 26
+ name Python_VLAN_26
+!
+vlan 27
+ name Python_VLAN_27
+!
+vlan 28
+ name Python_VLAN_28
+!
+vlan 29
+ name Python_VLAN_29
+!
+vlan 30
+ name Python_VLAN_30
+!
+vlan 31
+ name Python_VLAN_31
+!
+vlan 32
+ name Python_VLAN_32
+!
+vlan 33
+ name Python_VLAN_33
+!
+vlan 34
+ name Python_VLAN_34
+!
+vlan 35
+ name Python_VLAN_35
+!
+vlan 36
+ name Python_VLAN_36
+!
+vlan 37
+ name Python_VLAN_37
+!
+vlan 38
+ name Python_VLAN_38
+!
+vlan 39
+ name Python_VLAN_39
+!
+vlan 40
+ name Python_VLAN_40
+!
+vlan 41
+ name Python_VLAN_41
+!
+vlan 42
+ name Python_VLAN_42
+!
+vlan 43
+ name Python_VLAN_43
+!
+vlan 44
+ name Python_VLAN_44
+!
+vlan 45
+ name Python_VLAN_45
+!
+vlan 46
+ name Python_VLAN_46
+!
+vlan 47
+ name Python_VLAN_47
+!
+vlan 48
+ name Python_VLAN_48
+!
+vlan 49
+ name Python_VLAN_49
+!
+vlan 50
+ name Python_VLAN_50
+!
+vlan 51
+ name Python_VLAN_51
+!
+vlan 52
+ name Python_VLAN_52
+!
+vlan 53
+ name Python_VLAN_53
+!
+vlan 54
+ name Python_VLAN_54
+!
+vlan 55
+ name Python_VLAN_55
+!
+vlan 56
+ name Python_VLAN_56
+!
+vlan 57
+ name Python_VLAN_57
+!
+vlan 58
+ name Python_VLAN_58
+!
+vlan 59
+ name Python_VLAN_59
+!
+vlan 60
+ name Python_VLAN_60
+!
+vlan 61
+ name Python_VLAN_61
+!
+vlan 62
+ name Python_VLAN_62
+!
+vlan 63
+ name Python_VLAN_63
+!
+vlan 64
+ name Python_VLAN_64
+!
+vlan 65
+ name Python_VLAN_65
+!
+vlan 66
+ name Python_VLAN_66
+!
+vlan 67
+ name Python_VLAN_67
+!
+vlan 68
+ name Python_VLAN_68
+!
+vlan 69
+ name Python_VLAN_69
+!
+vlan 70
+ name Python_VLAN_70
+!
+vlan 71
+ name Python_VLAN_71
+!
+vlan 72
+ name Python_VLAN_72
+!
+vlan 73
+ name Python_VLAN_73
+!
+vlan 74
+ name Python_VLAN_74
+!
+vlan 75
+ name Python_VLAN_75
+!
+vlan 76
+ name Python_VLAN_76
+!
+vlan 77
+ name Python_VLAN_77
+!
+vlan 78
+ name Python_VLAN_78
+!
+vlan 79
+ name Python_VLAN_79
+!
+vlan 80
+ name Python_VLAN_80
+!
+vlan 81
+ name Python_VLAN_81
+!
+vlan 82
+ name Python_VLAN_82
+!
+vlan 83
+ name Python_VLAN_83
+!
+vlan 84
+ name Python_VLAN_84
+!
+vlan 85
+ name Python_VLAN_85
+!
+vlan 86
+ name Python_VLAN_86
+!
+vlan 87
+ name Python_VLAN_87
+!
+vlan 88
+ name Python_VLAN_88
+!
+vlan 89
+ name Python_VLAN_89
+!
+vlan 90
+ name Python_VLAN_90
+!
+vlan 91
+ name Python_VLAN_91
+!
+vlan 92
+ name Python_VLAN_92
+!
+vlan 93
+ name Python_VLAN_93
+!
+vlan 94
+ name Python_VLAN_94
+!
+vlan 95
+ name Python_VLAN_95
+!
+vlan 96
+ name Python_VLAN_96
+!
+vlan 97
+ name Python_VLAN_97
+!
+vlan 98
+ name Python_VLAN_98
+!
+vlan 99
+ name Python_VLAN_99
+!
+vlan 100
+ name TI
+!
+vlan 200
+ name Ingenieria
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+ switchport trunk native vlan 100
+ switchport mode trunk
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/9
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/10
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/11
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/12
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/13
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/14
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/15
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/16
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/17
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/18
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/19
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/20
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/21
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/22
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/23
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/24
+ switchport access vlan 100
+ switchport mode access
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan100
+ ip address 192.168.10.3 255.255.255.0
+!
+ip default-gateway 192.168.10.1
+ip http server
+ip http secure-server
+logging trap warnings
+logging host 192.168.10.18
+logging host 192.168.10.15
+!
+!
+line con 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+!
+end
